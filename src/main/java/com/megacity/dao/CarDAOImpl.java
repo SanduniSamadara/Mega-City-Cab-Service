@@ -8,20 +8,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CarDAOImpl implements CarDAO {
-    private static final String URL = "jdbc:mysql://localhost:3306/megacity";
+    private static final String URL = "jdbc:mysql://localhost:3306/megacitycab";
     private static final String USER = "root";
-    private static final String PASSWORD = "";
+    private static final String PASSWORD = "1234";
 
     // Add a new car
     @Override
     public void addCar(Car car) {
-        String sql = "INSERT INTO cars (name, plate_number, year, price) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO cars (name, plate_number, year, price, model) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, car.getName());
             stmt.setString(2, car.getPlateNumber());
             stmt.setInt(3, car.getYear());
             stmt.setDouble(4, car.getPrice());
+            stmt.setString(5, car.getModel());
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -37,7 +38,7 @@ public class CarDAOImpl implements CarDAO {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                car = new Car(rs.getInt("id"), rs.getString("name"), rs.getString("plate_number"), rs.getInt("year"), rs.getDouble("price"), rs.getString("color"));
+                car = new Car(rs.getInt("id"), rs.getString("name"), rs.getString("plate_number"), rs.getInt("year"), rs.getDouble("price"), rs.getString("model"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
