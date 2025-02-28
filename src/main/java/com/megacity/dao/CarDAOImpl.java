@@ -37,7 +37,7 @@ public class CarDAOImpl implements CarDAO {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                car = new Car(rs.getInt("id"), rs.getString("name"), rs.getString("plate_number"), rs.getInt("year"), rs.getDouble("price"));
+                car = new Car(rs.getInt("id"), rs.getString("name"), rs.getString("plate_number"), rs.getInt("year"), rs.getDouble("price"), rs.getString("color"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -46,20 +46,20 @@ public class CarDAOImpl implements CarDAO {
     }
 
     @Override
-    public List<Car> getAllCars() {
-        List<Car> cars = new ArrayList<>();
-        String sql = "SELECT * FROM cars";
-        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                cars.add(new Car(rs.getInt("id"), rs.getString("name"), rs.getString("plate_number"), rs.getInt("year"), rs.getDouble("price")));
+        public List<Car> getAllCars() {
+            List<Car> cars = new ArrayList<>();
+            String sql = "SELECT * FROM cars";
+            try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+                 Statement stmt = conn.createStatement();
+                 ResultSet rs = stmt.executeQuery(sql)) {
+                while (rs.next()) {
+                    cars.add(new Car(rs.getInt("id"), rs.getString("name"), rs.getString("plate_number"), rs.getInt("year"), rs.getDouble("price"), rs.getString("model")));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+            return cars;
         }
-        return cars;
-    }
 
     @Override
     public void updateCar(Car car) {

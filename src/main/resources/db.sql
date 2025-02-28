@@ -27,3 +27,19 @@ VALUES
     ('R003', 'Michael Brown', '789 Pine St, Galle, Sri Lanka', '112233445V'),
     ('R004', 'Emily White', '321 Oak St, Jaffna, Sri Lanka', '556677889V'),
     ('R005', 'David Black', '654 Maple St, Negombo, Sri Lanka', '223344556V');
+
+CREATE TABLE drivers (
+                         id INT AUTO_INCREMENT PRIMARY KEY,
+                         name VARCHAR(255) NOT NULL,
+                         license_number VARCHAR(255) NOT NULL,
+                         address TEXT NOT NULL,
+                         contact_number VARCHAR(255) NOT NULL
+);
+
+INSERT INTO drivers (name, license_number, address, contact_number)
+VALUES
+    ('John Doe', 'ABC12345', '123 Street, Colombo', '0771234567'),
+    ('Jane Smith', 'XYZ67890', '456 Avenue, Colombo', '0782345678'),
+    ('Mark Johnson', 'LMN11223', '789 Road, Kandy', '0773456789'),
+    ('Emily Davis', 'QRS44556', '1010 Lane, Galle', '0784567890'),
+    ('Michael Brown', 'TUV99887', '2020 Boulevard, Negombo', '0775678901');
