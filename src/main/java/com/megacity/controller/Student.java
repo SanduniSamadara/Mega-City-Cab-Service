@@ -1,4 +1,4 @@
-package controller;
+package com.megacity.controller;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
