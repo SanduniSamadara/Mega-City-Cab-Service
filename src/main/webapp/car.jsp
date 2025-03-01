@@ -10,13 +10,21 @@
 <%@ page import="com.megacity.model.Car" %>
 <%@ page import="com.megacity.dao.CarDAOImpl" %>
 <%@ page import="com.megacity.dao.facory.CarDAOFactory" %>
-<%@ page import="jakarta.servlet.http.HttpSession" %>
+
 
 <%
     // Fetch the list of cars using the DAO factory
     CarDAOImpl carDAO = (CarDAOImpl) CarDAOFactory.getCarDAO();
     List<Car> cars = carDAO.getAllCars();
 %>
+
+<% String message = request.getParameter("message");
+    if (message != null) { %>
+<div class="alert alert-success" role="alert">
+    <%= message %>
+</div>
+<% } %>
+
 
 <!DOCTYPE html>
 <html lang="en">

@@ -28,7 +28,7 @@ public class CustomerDAOImpl implements CustomerDAO {
             preparedStatement.setString(3, customer.getAddress());
             preparedStatement.setString(4, customer.getNic());
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -43,7 +43,7 @@ public class CustomerDAOImpl implements CustomerDAO {
             preparedStatement.setString(4, customer.getNic());
             preparedStatement.setInt(5, customer.getId());
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -54,7 +54,7 @@ public class CustomerDAOImpl implements CustomerDAO {
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_CUSTOMER_SQL)) {
             preparedStatement.setInt(1, customerId);
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -73,7 +73,7 @@ public class CustomerDAOImpl implements CustomerDAO {
                 String nic = resultSet.getString("nic");
                 customers.add(new Customer(id, registrationNumber, name, address, nic));
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return customers;
@@ -95,7 +95,7 @@ public class CustomerDAOImpl implements CustomerDAO {
                     customer = new Customer(id, registrationNumber, name, address, nic);
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return customer;

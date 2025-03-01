@@ -47,20 +47,20 @@ public class CarDAOImpl implements CarDAO {
     }
 
     @Override
-        public List<Car> getAllCars() {
-            List<Car> cars = new ArrayList<>();
-            String sql = "SELECT * FROM cars";
-            try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-                 Statement stmt = conn.createStatement();
-                 ResultSet rs = stmt.executeQuery(sql)) {
-                while (rs.next()) {
-                    cars.add(new Car(rs.getInt("id"), rs.getString("name"), rs.getString("plate_number"), rs.getInt("year"), rs.getDouble("price"), rs.getString("model")));
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
+    public List<Car> getAllCars() {
+        List<Car> cars = new ArrayList<>();
+        String sql = "SELECT * FROM cars";
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                cars.add(new Car(rs.getInt("id"), rs.getString("name"), rs.getString("plate_number"), rs.getInt("year"), rs.getDouble("price"), rs.getString("model")));
             }
-            return cars;
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        return cars;
+    }
 
     @Override
     public void updateCar(Car car) {
