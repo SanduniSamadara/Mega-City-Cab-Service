@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BookingDAOImpl implements BookingDAO {
-    private static final String URL = "jdbc:mysql://localhost:3306/megacity";
+    private static final String URL = "jdbc:mysql://localhost:3306/megacitycab";
     private static final String USER = "root";
-    private static final String PASSWORD = "yourPassword"; // Change as needed
+    private static final String PASSWORD = "1234"; // Change as needed
 
     @Override
     public void addBooking(Booking booking) throws Exception {
