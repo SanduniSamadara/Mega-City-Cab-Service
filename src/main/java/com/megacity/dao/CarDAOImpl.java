@@ -15,7 +15,7 @@ public class CarDAOImpl implements CarDAO {
     // Add a new car
     @Override
     public void addCar(Car car) {
-        String sql = "INSERT INTO cars (name, plate_number, year, price) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO cars (name, plate_number, year, price, model) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, car.getName());
@@ -37,7 +37,7 @@ public class CarDAOImpl implements CarDAO {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                car = new Car(rs.getInt("id"), rs.getString("name"), rs.getString("plate_number"), rs.getInt("year"), rs.getDouble("price"));
+                car = new Car(rs.getInt("id"), rs.getString("name"), rs.getString("plate_number"), rs.getInt("year"), rs.getDouble("price"), rs.getString("model"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -53,7 +53,7 @@ public class CarDAOImpl implements CarDAO {
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                cars.add(new Car(rs.getInt("id"), rs.getString("name"), rs.getString("plate_number"), rs.getInt("year"), rs.getDouble("price")));
+                cars.add(new Car(rs.getInt("id"), rs.getString("name"), rs.getString("plate_number"), rs.getInt("year"), rs.getDouble("price"), rs.getString("model")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
