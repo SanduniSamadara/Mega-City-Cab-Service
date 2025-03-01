@@ -1,4 +1,8 @@
-<%--
+<%@ page import="com.megacity.dao.daoImpl.CustomerDAOImpl" %>
+<%@ page import="com.megacity.dao.facory.CustomerDAOFactory" %>
+<%@ page import="com.megacity.model.Customer" %>
+<%@ page import="com.megacity.dao.CustomerDAO" %>
+<%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
   User: Samadhara
   Date: 2/28/2025
@@ -6,6 +10,20 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<%
+    // Fetch the list of cars using the DAO factory
+    CustomerDAOImpl customerDAO = (CustomerDAOImpl) CustomerDAOFactory.getCustomerDAO();
+    List<Customer> customers = customerDAO.getAllCustomers();
+%>
+
+<% String message = request.getParameter("message");
+    if (message != null) { %>
+<div class="alert alert-success" role="alert">
+    <%= message %>
+</div>
+<% } %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,5 +47,38 @@
 
     <input type="submit" value="Register Customer">
 </form>
+
+<h4>Existing Customers</h4>
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>Registration Number</th>
+        <th>Name</th>
+        <th>Address</th>
+        <th>NIC</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <%
+        // Assuming 'customers' is a list of Customer objects fetched from the database
+        for (Customer customer : customers) {
+    %>
+    <tr>
+        <td><%= customer.getRegistrationNumber() %></td>
+        <td><%= customer.getName() %></td>
+        <td><%= customer.getAddress() %></td>
+        <td><%= customer.getNic() %></td>
+        <td>
+            <a href="editCustomer.jsp?customerId=<%= customer.getId() %>" class="btn btn-warning btn-sm">Edit</a>
+            <a href="CustomerServlet?action=delete&customerId=<%= customer.getId() %>" class="btn btn-danger btn-sm">Delete</a>
+        </td>
+    </tr>
+    <%
+        }
+    %>
+    </tbody>
+</table>
+</div>
 </body>
 </html>
