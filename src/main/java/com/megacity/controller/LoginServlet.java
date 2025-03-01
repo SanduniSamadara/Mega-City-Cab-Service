@@ -2,13 +2,14 @@ package com.megacity.controller;
 
 import com.megacity.dao.UserDAO;
 import com.megacity.util.DBConnection;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.*;
 
@@ -26,7 +27,7 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
 
         try (Connection conn = DBConnection.getConnection()) {
-            String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+            String sql = "SELECT * FROM user WHERE username = ? AND password = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, username);
             ps.setString(2, password);
@@ -35,7 +36,10 @@ public class LoginServlet extends HttpServlet {
             if (rs.next()) {
                 HttpSession session = request.getSession();
                 session.setAttribute("username", username);
-                response.sendRedirect("webapps/dashboard.jsp");
+//                response.sendRedirect("webapps/dashboard.jsp");
+                response.sendRedirect(request.getContextPath() + "/dashboard.jsp");
+
+
             } else {
                 request.setAttribute("error", "Invalid username or password!");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
