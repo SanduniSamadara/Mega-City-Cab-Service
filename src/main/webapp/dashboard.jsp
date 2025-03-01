@@ -47,9 +47,9 @@
 
         <!-- Vehicle Management -->
         <div class="col-md-4">
-            <div class="card p-3" onclick="location.href='vehicleManagement.jsp'">
-                <h5>🛻 Vehicle Management</h5>
-                <p>View and update vehicle records.</p>
+            <div class="card p-3" onclick="location.href='customer.jsp'">
+                <h5>🧑‍💼 Customer Management</h5>
+                <p>View and update customer records.</p>
             </div>
         </div>
 
