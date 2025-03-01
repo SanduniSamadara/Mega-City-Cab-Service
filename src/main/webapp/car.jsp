@@ -18,6 +18,14 @@
     List<Car> cars = carDAO.getAllCars();
 %>
 
+<% String message = request.getParameter("message");
+    if (message != null) { %>
+<div class="alert alert-success" role="alert">
+    <%= message %>
+</div>
+<% } %>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

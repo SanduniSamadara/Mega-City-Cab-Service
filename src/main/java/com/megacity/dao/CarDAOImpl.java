@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CarDAOImpl implements CarDAO {
-    private static final String URL = "jdbc:mysql://localhost:3306/megacity";
+    private static final String URL = "jdbc:mysql://localhost:3306/megacitycab";
     private static final String USER = "root";
-    private static final String PASSWORD = "";
+    private static final String PASSWORD = "1234";
 
     // Add a new car
     @Override
@@ -22,6 +22,7 @@ public class CarDAOImpl implements CarDAO {
             stmt.setString(2, car.getPlateNumber());
             stmt.setInt(3, car.getYear());
             stmt.setDouble(4, car.getPrice());
+            stmt.setString(5, car.getModel());
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -63,19 +64,21 @@ public class CarDAOImpl implements CarDAO {
 
     @Override
     public void updateCar(Car car) {
-        String sql = "UPDATE cars SET name=?, plate_number=?, year=?, price=? WHERE id=?";
+        String sql = "UPDATE cars SET name=?, plate_number=?, year=?, price=?, model=? WHERE id=?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, car.getName());
             stmt.setString(2, car.getPlateNumber());
             stmt.setInt(3, car.getYear());
             stmt.setDouble(4, car.getPrice());
-            stmt.setInt(5, car.getId());
+            stmt.setString(5, car.getModel());
+            stmt.setInt(6, car.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
 
     @Override
     public void deleteCar(int id) {
