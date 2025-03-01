@@ -20,6 +20,37 @@ CREATE TABLE cars (
                       price DOUBLE NOT NULL,
                       model VARCHAR(50) NOT NULL
 );
+CREATE TABLE IF NOT EXISTS customers (
+                           id INT AUTO_INCREMENT PRIMARY KEY,
+                           registration_number VARCHAR(255) NOT NULL,
+                           name VARCHAR(255) NOT NULL,
+                           address TEXT NOT NULL,
+                           nic VARCHAR(255) NOT NULL
+);
+
+INSERT INTO customers (registration_number, name, address, nic)
+VALUES
+    ('R001', 'John Doe', '123 Main St, Colombo, Sri Lanka', '123456789V'),
+    ('R002', 'Jane Smith', '456 Elm St, Kandy, Sri Lanka', '987654321V'),
+    ('R003', 'Michael Brown', '789 Pine St, Galle, Sri Lanka', '112233445V'),
+    ('R004', 'Emily White', '321 Oak St, Jaffna, Sri Lanka', '556677889V'),
+    ('R005', 'David Black', '654 Maple St, Negombo, Sri Lanka', '223344556V');
+
+
+CREATE TABLE bookings (
+                          booking_number VARCHAR(50) PRIMARY KEY,
+                          customer_name VARCHAR(255) NOT NULL,
+                          address VARCHAR(255) NOT NULL,
+                          telephone VARCHAR(50) NOT NULL,
+                          destination VARCHAR(255) NOT NULL
+);
+
+INSERT INTO bookings (booking_number, customer_name, address, telephone, destination) VALUES
+                                                                                          ('B001', 'John Doe', '123 Main St, Colombo', '0711234567', 'Galle'),
+                                                                                          ('B002', 'Jane Smith', '456 Park Rd, Colombo', '0779876543', 'Kandy'),
+                                                                                          ('B003', 'Alice Fernando', '789 Ocean View, Colombo', '0765432100', 'Negombo'),
+                                                                                          ('B004', 'Bob Perera', '321 Hill St, Colombo', '0781234567', 'Anuradhapura'),
+                                                                                          ('B005', 'Carol De Silva', '654 River Rd, Colombo', '0759876543', 'Matale');
 
 INSERT INTO cars (name, plate_number, year, price, model) VALUES
                                                               ('Toyota Camry', 'ABC123', 2018, 22000.00, 'Camry'),
