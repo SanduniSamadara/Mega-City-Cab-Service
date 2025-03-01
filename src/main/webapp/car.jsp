@@ -10,7 +10,7 @@
 <%@ page import="com.megacity.model.Car" %>
 <%@ page import="com.megacity.dao.CarDAOImpl" %>
 <%@ page import="com.megacity.dao.facory.CarDAOFactory" %>
-<%@ page import="jakarta.servlet.http.HttpSession" %>
+
 
 <%
     // Fetch the list of cars using the DAO factory
