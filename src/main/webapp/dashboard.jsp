@@ -39,7 +39,7 @@
     <div class="row">
         <!-- Car Management -->
         <div class="col-md-4">
-            <div class="card p-3" onclick="location.href='carManagement.jsp'">
+            <div class="card p-3" onclick="location.href='car.jsp'">
                 <h5>🚗 Car Management</h5>
                 <p>Manage car details.</p>
             </div>
