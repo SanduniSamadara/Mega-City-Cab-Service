@@ -17,18 +17,27 @@ public class CustomerServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String customerId = request.getParameter("customerId");
         String registrationNumber = request.getParameter("registrationNumber");
         String name = request.getParameter("name");
         String address = request.getParameter("address");
         String nic = request.getParameter("nic");
 
-        Customer newCustomer = new Customer(0, registrationNumber, name, address, nic);
-
         CustomerDAO customerDAO = CustomerDAOFactory.getCustomerDAO();
-        customerDAO.addCustomer(newCustomer); // Add the new customer to the database
 
-        response.sendRedirect("customer.jsp"); // Redirect back to the customer page after adding
+        if (customerId != null && !customerId.isEmpty()) {
+            // Updating existing customer
+            Customer existingCustomer = new Customer(Integer.parseInt(customerId), registrationNumber, name, address, nic);
+            customerDAO.updateCustomer(existingCustomer);
+        } else {
+            // Adding new customer
+            Customer newCustomer = new Customer(0, registrationNumber, name, address, nic);
+            customerDAO.addCustomer(newCustomer);
+        }
+
+        response.sendRedirect("customer.jsp"); // Redirect to customer list page
     }
+
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
