@@ -13,21 +13,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    // Fetch driver details for the selected driver ID
-    String driverIdParam = request.getParameter("driverId");
-    Driver driver = null;
-
-    if (driverIdParam != null && !driverIdParam.isEmpty()) {
-        try {
-            int driverId = Integer.parseInt(driverIdParam);
-            DriverDAOImpl driverDAO = (DriverDAOImpl) DriverDAOFactory.getDriverDAO();
-            driver = driverDAO.getDriverById(driverId);
-        } catch (NumberFormatException e) {
-            out.println("Invalid driver ID.");
-        }
-    } else {
-        out.println("Driver ID is missing.");
-    }
+    int driverId = Integer.parseInt(request.getParameter("driverId"));
+    DriverDAOImpl driverDAO = (DriverDAOImpl) DriverDAOFactory.getDriverDAO();
+    Driver driver = driverDAO.getDriverById(driverId);
 %>
 
 <!DOCTYPE html>
@@ -50,7 +38,7 @@
     <input type="text" id="name" name="name" value="<%= driver.getName() %>" required><br><br>
 
     <label for="phone">Phone:</label><br>
-    <input type="text" id="phone" name="phone" value="<%= driver.getPhone() %>" required><br><br>
+    <input type="text" id="phone" name="phone" value="<%= driver.getContactNumber() %>" required><br><br>
 
     <label for="address">Address:</label><br>
     <input type="text" id="address" name="address" value="<%= driver.getAddress() %>" required><br><br>
