@@ -1,6 +1,7 @@
 <%@ page import="com.megacity.dao.daoImpl.CustomerDAOImpl" %>
 <%@ page import="com.megacity.dao.facory.CustomerDAOFactory" %>
-<%@ page import="com.megacity.model.Customer" %><%--
+<%@ page import="com.megacity.model.Customer" %>
+<%@ page import="com.megacity.dao.CustomerDAO" %><%--
   Created by IntelliJ IDEA.
   User: Samadhara
   Date: 3/1/2025
@@ -13,9 +14,9 @@
 
 <%
     // Fetch car details for the selected car ID
-    int carId = Integer.parseInt(request.getParameter("carId"));
+    int customerId = Integer.parseInt(request.getParameter("customerId"));
     CustomerDAOImpl customerDAO = (CustomerDAOImpl) CustomerDAOFactory.getCustomerDAO();
-    Customer customer = customerDAO.getCustomerById(carId);
+    Customer customer = customerDAO.getCustomerById(customerId);
 %>
 
 <!DOCTYPE html>
@@ -23,6 +24,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Edit Customer</title>
+
 </head>
 <body>
 <h1>Edit Customer</h1>

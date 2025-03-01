@@ -1,10 +1,14 @@
 package com.megacity.controller;
 
 import com.megacity.dao.CustomerDAO;
+import com.megacity.dao.daoImpl.CarDAO;
+import com.megacity.dao.facory.CarDAOFactory;
 import com.megacity.dao.facory.CustomerDAOFactory;
+import com.megacity.model.Car;
 import com.megacity.model.Customer;
 
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -41,6 +45,25 @@ public class CustomerServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
+
+        if ("edit".equals(action)) {
+            String customerIdParam = request.getParameter("customerId");
+            if (customerIdParam != null && !customerIdParam.isEmpty()) {
+                try {
+                    int customerId = Integer.parseInt(customerIdParam);
+                    CustomerDAO customerDAO = CustomerDAOFactory.getCustomerDAO();
+                    Customer customer = customerDAO.getCustomerById(customerId);
+                    request.setAttribute("customer", customer);
+                    RequestDispatcher rd = request.getRequestDispatcher("editCustomer.jsp");
+                    rd.forward(request, response);
+                    return; // Exit after forwarding
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    // Optionally forward to an error page or set an error attribute
+                }
+            }
+        }
+
 
         if ("delete".equals(action)) {
             int customerId = Integer.parseInt(request.getParameter("customerId"));
