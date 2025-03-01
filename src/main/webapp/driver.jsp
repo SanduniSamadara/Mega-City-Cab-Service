@@ -79,7 +79,7 @@
         <tr>
             <td><%= driver.getLicenseNumber() %></td>
             <td><%= driver.getName() %></td>
-            <td><%= driver.getPhone() %></td>
+            <td><%= driver.getContactNumber() %></td>
             <td><%= driver.getAddress() %></td>
             <td>
                 <a href="editDriver.jsp?driverId=<%= driver.getId() %>" class="btn btn-warning btn-sm">Edit</a>
