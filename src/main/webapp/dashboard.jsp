@@ -63,7 +63,7 @@
 
         <!-- Booking Management -->
         <div class="col-md-4 mt-3">
-            <div class="card p-3" onclick="location.href='bookingManagement.jsp'">
+            <div class="card p-3" onclick="location.href='booking.jsp'">
                 <h5>📅 Booking Management</h5>
                 <p>Handle customer bookings.</p>
             </div>
