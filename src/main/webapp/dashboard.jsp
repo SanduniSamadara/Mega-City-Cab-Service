@@ -55,7 +55,7 @@
 
         <!-- Driver Management -->
         <div class="col-md-4">
-            <div class="card p-3" onclick="location.href='driverManagement.jsp'">
+            <div class="card p-3" onclick="location.href='driver.jsp'">
                 <h5>👨‍✈️ Driver Management</h5>
                 <p>Manage driver information.</p>
             </div>
