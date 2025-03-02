@@ -2,91 +2,112 @@ package com.megacity.dao.daoImpl;
 
 import com.megacity.dao.BookingDAO;
 import com.megacity.model.Booking;
+import com.megacity.util.DBConnection;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class BookingDAOImpl implements BookingDAO {
-    private static final String URL = "jdbc:mysql://localhost:3306/megacity";
-    private static final String USER = "root";
-    private static final String PASSWORD = "yourPassword"; // Change as needed
+
+    private static final String ADD_BOOKING_SQL = "INSERT INTO bookings (order_number, customer_name, address, telephone_number, destination_details) VALUES (?, ?, ?, ?, ?)";
+    private static final String UPDATE_BOOKING_SQL = "UPDATE bookings SET order_number = ?, customer_name = ?, address = ?, telephone_number = ?, destination_details = ? WHERE id = ?";
+    private static final String DELETE_BOOKING_SQL = "DELETE FROM bookings WHERE id = ?";
+    private static final String GET_ALL_BOOKINGS_SQL = "SELECT * FROM bookings";
+    private static final String GET_BOOKING_BY_ID_SQL = "SELECT * FROM bookings WHERE id = ?";
 
     @Override
-    public void addBooking(Booking booking) throws Exception {
-        String sql = "INSERT INTO bookings (booking_number, customer_name, address, telephone, destination) VALUES (?, ?, ?, ?, ?)";
-        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, booking.getBookingNumber());
-            stmt.setString(2, booking.getCustomerName());
-            stmt.setString(3, booking.getAddress());
-            stmt.setString(4, booking.getTelephone());
-            stmt.setString(5, booking.getDestination());
-            stmt.executeUpdate();
+    public void addBooking(Booking booking) {
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(ADD_BOOKING_SQL)) {
+            preparedStatement.setString(1, booking.getBookingNumber());
+            preparedStatement.setString(2, booking.getCustomerName());
+            preparedStatement.setString(3, booking.getAddress());
+            preparedStatement.setString(4, booking.getTelephone());
+            preparedStatement.setString(5, booking.getDestination());
+            preparedStatement.executeUpdate();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public Booking getBookingByNumber(String bookingNumber) throws Exception {
-        Booking booking = null;
-        String sql = "SELECT * FROM bookings WHERE booking_number = ?";
-        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, bookingNumber);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                booking = new Booking();
-                booking.setBookingNumber(rs.getString("booking_number"));
-                booking.setCustomerName(rs.getString("customer_name"));
-                booking.setAddress(rs.getString("address"));
-                booking.setTelephone(rs.getString("telephone"));
-                booking.setDestination(rs.getString("destination"));
-            }
-        }
-        return booking;
+        return null;
     }
 
     @Override
-    public List<Booking> getAllBookings() throws Exception {
-        List<Booking> list = new ArrayList<>();
-        String sql = "SELECT * FROM bookings";
-        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                Booking booking = new Booking();
-                booking.setBookingNumber(rs.getString("booking_number"));
-                booking.setCustomerName(rs.getString("customer_name"));
-                booking.setAddress(rs.getString("address"));
-                booking.setTelephone(rs.getString("telephone"));
-                booking.setDestination(rs.getString("destination"));
-                list.add(booking);
-            }
-        }
-        return list;
-    }
-
-    @Override
-    public void updateBooking(Booking booking) throws Exception {
-        String sql = "UPDATE bookings SET customer_name=?, address=?, telephone=?, destination=? WHERE booking_number=?";
-        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, booking.getCustomerName());
-            stmt.setString(2, booking.getAddress());
-            stmt.setString(3, booking.getTelephone());
-            stmt.setString(4, booking.getDestination());
-            stmt.setString(5, booking.getBookingNumber());
-            stmt.executeUpdate();
+    public void updateBooking(Booking booking) {
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_BOOKING_SQL)) {
+            preparedStatement.setString(1, booking.getBookingNumber());
+            preparedStatement.setString(2, booking.getCustomerName());
+            preparedStatement.setString(3, booking.getAddress());
+            preparedStatement.setString(4, booking.getTelephone());
+            preparedStatement.setString(5, booking.getDestination());
+//            preparedStatement.setInt(6, booking.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void deleteBooking(String bookingNumber) throws Exception {
-        String sql = "DELETE FROM bookings WHERE booking_number=?";
-        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, bookingNumber);
-            stmt.executeUpdate();
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BOOKING_SQL)) {
+            preparedStatement.setString(1, bookingNumber);
+            preparedStatement.executeUpdate();
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
+    }
+
+    @Override
+    public List<Booking> getAllBookings() {
+        List<Booking> bookings = new ArrayList<>();
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_BOOKINGS_SQL);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String orderNumber = resultSet.getString("order_number");
+                String customerName = resultSet.getString("customer_name");
+                String address = resultSet.getString("address");
+                String telephoneNumber = resultSet.getString("telephone_number");
+                String destinationDetails = resultSet.getString("destination_details");
+                bookings.add(new Booking(id, orderNumber, customerName, address, telephoneNumber, destinationDetails));
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return bookings;
+    }
+
+    @Override
+    public Booking getBookingById(int bookingId) {
+        Booking booking = null;
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_BOOKING_BY_ID_SQL)) {
+            preparedStatement.setInt(1, bookingId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    int id = resultSet.getInt("id");
+                    String orderNumber = resultSet.getString("order_number");
+                    String customerName = resultSet.getString("customer_name");
+                    String address = resultSet.getString("address");
+                    String telephoneNumber = resultSet.getString("telephone_number");
+                    String destinationDetails = resultSet.getString("destination_details");
+                    booking = new Booking(id, orderNumber, customerName, address, telephoneNumber, destinationDetails);
+                }
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return booking;
     }
 }

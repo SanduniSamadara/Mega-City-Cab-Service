@@ -1,114 +1,57 @@
 package com.megacity.controller;
 
 import com.megacity.dao.BookingDAO;
-import com.megacity.dao.daoImpl.BookingDAOImpl;
+import com.megacity.dao.facory.BookingDAOFactory;
 import com.megacity.model.Booking;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 @WebServlet("/BookingServlet")
 public class BookingServlet extends HttpServlet {
-    private BookingDAO bookingDAO;
+    private static final long serialVersionUID = 1L;
 
-    @Override
-    public void init() throws ServletException {
-        bookingDAO = new BookingDAOImpl();
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        String action = request.getParameter("action");
-        if (action == null) {
-            action = "list";
-        }
-
-        try {
-            switch (action) {
-                case "new":
-                    showNewForm(request, response);
-                    break;
-                case "insert":
-                    insertBooking(request, response);
-                    break;
-                case "delete":
-                    deleteBooking(request, response);
-                    break;
-                case "edit":
-                    showEditForm(request, response);
-                    break;
-                case "update":
-                    updateBooking(request, response);
-                    break;
-                default:
-                    listBooking(request, response);
-                    break;
-            }
-        } catch (Exception e) {
-            throw new ServletException(e);
-        }
-    }
-
-    // For simplicity, use doGet for all actions.
-    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request, response);
-    }
-
-    private void listBooking(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        List<Booking> listBooking = bookingDAO.getAllBookings();
-        request.setAttribute("bookings", listBooking);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/bookings.jsp");
-        dispatcher.forward(request, response);
-    }
-
-    private void showNewForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/booking-form.jsp");
-        dispatcher.forward(request, response);
-    }
-
-    private void insertBooking(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String bookingNumber = request.getParameter("bookingNumber");
+        // Retrieve parameters from the form
+        String orderNumber = request.getParameter("orderNumber");
         String customerName = request.getParameter("customerName");
         String address = request.getParameter("address");
-        String telephone = request.getParameter("telephone");
-        String destination = request.getParameter("destination");
+        String telephoneNumber = request.getParameter("telephoneNumber");
+        String destinationDetails = request.getParameter("destinationDetails");
 
-        Booking newBooking = new Booking(bookingNumber, customerName, address, telephone, destination);
-        bookingDAO.addBooking(newBooking);
-        response.sendRedirect("BookingServlet");
+        // Create a new booking object
+        Booking newBooking = new Booking(0, orderNumber, customerName, address, telephoneNumber, destinationDetails);
+
+        // Get the DAO instance and add the booking
+        BookingDAO bookingDAO = BookingDAOFactory.getBookingDAO();
+        try {
+            bookingDAO.addBooking(newBooking);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+//        bookingDAO.addBooking(newBooking); // Add the new booking to the database
+
+        // Redirect to the booking page after adding the booking
+        response.sendRedirect("booking.jsp");
     }
 
-    private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String bookingNumber = request.getParameter("bookingNumber");
-        Booking existingBooking = bookingDAO.getBookingByNumber(bookingNumber);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/jsp/booking-form.jsp");
-        request.setAttribute("booking", existingBooking);
-        dispatcher.forward(request, response);
-    }
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
 
-    private void updateBooking(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String bookingNumber = request.getParameter("bookingNumber");
-        String customerName = request.getParameter("customerName");
-        String address = request.getParameter("address");
-        String telephone = request.getParameter("telephone");
-        String destination = request.getParameter("destination");
-
-        Booking booking = new Booking(bookingNumber, customerName, address, telephone, destination);
-        bookingDAO.updateBooking(booking);
-        response.sendRedirect("BookingServlet");
-    }
-
-    private void deleteBooking(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String bookingNumber = request.getParameter("bookingNumber");
-        bookingDAO.deleteBooking(bookingNumber);
-        response.sendRedirect("BookingServlet");
+        // Handle delete action
+        if ("delete".equals(action)) {
+            String bookingNumber = request.getParameter("bookingNumber");
+            BookingDAO bookingDAO = BookingDAOFactory.getBookingDAO();
+            try {
+                bookingDAO.deleteBooking(bookingNumber);// Delete the booking from the database
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            response.sendRedirect("booking.jsp"); // Redirect back to the booking page after deletion
+        }
     }
 }

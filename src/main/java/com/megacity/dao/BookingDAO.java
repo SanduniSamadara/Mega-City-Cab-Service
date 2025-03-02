@@ -9,4 +9,6 @@ public interface BookingDAO {
     List<Booking> getAllBookings() throws Exception;
     void updateBooking(Booking booking) throws Exception;
     void deleteBooking(String bookingNumber) throws Exception;
+
+    Booking getBookingById(int bookingId);
 }
