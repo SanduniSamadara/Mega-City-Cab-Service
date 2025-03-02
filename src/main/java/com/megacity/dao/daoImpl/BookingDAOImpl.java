@@ -14,11 +14,11 @@ import java.util.List;
 
 public class BookingDAOImpl implements BookingDAO {
 
-    private static final String ADD_BOOKING_SQL = "INSERT INTO bookings (order_number, customer_name, address, telephone_number, destination_details) VALUES (?, ?, ?, ?, ?)";
-    private static final String UPDATE_BOOKING_SQL = "UPDATE bookings SET order_number = ?, customer_name = ?, address = ?, telephone_number = ?, destination_details = ? WHERE id = ?";
-    private static final String DELETE_BOOKING_SQL = "DELETE FROM bookings WHERE id = ?";
+    private static final String ADD_BOOKING_SQL = "INSERT INTO bookings (booking_number, customer_name, address, telephone, destination) VALUES (?, ?, ?, ?, ?)";
+    private static final String UPDATE_BOOKING_SQL = "UPDATE bookings SET booking_number = ?, customer_name = ?, address = ?, telephone = ?, destination = ? WHERE booking_number = ?";
+    private static final String DELETE_BOOKING_SQL = "DELETE FROM bookings WHERE booking_number = ?";
     private static final String GET_ALL_BOOKINGS_SQL = "SELECT * FROM bookings";
-    private static final String GET_BOOKING_BY_ID_SQL = "SELECT * FROM bookings WHERE id = ?";
+    private static final String GET_BOOKING_BY_ID_SQL = "SELECT * FROM bookings WHERE booking_number = ?";
 
     @Override
     public void addBooking(Booking booking) {
@@ -74,13 +74,13 @@ public class BookingDAOImpl implements BookingDAO {
              PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_BOOKINGS_SQL);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String orderNumber = resultSet.getString("order_number");
+//                int id = resultSet.getInt("id");
+                String orderNumber = resultSet.getString("booking_number");
                 String customerName = resultSet.getString("customer_name");
                 String address = resultSet.getString("address");
-                String telephoneNumber = resultSet.getString("telephone_number");
-                String destinationDetails = resultSet.getString("destination_details");
-                bookings.add(new Booking(id, orderNumber, customerName, address, telephoneNumber, destinationDetails));
+                String telephoneNumber = resultSet.getString("telephone");
+                String destinationDetails = resultSet.getString("destination");
+                bookings.add(new Booking( orderNumber, customerName, address, telephoneNumber, destinationDetails));
             }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -96,13 +96,13 @@ public class BookingDAOImpl implements BookingDAO {
             preparedStatement.setInt(1, bookingId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    int id = resultSet.getInt("id");
-                    String orderNumber = resultSet.getString("order_number");
+//                    int id = resultSet.getInt("id");
+                    String orderNumber = resultSet.getString("booking_number");
                     String customerName = resultSet.getString("customer_name");
                     String address = resultSet.getString("address");
-                    String telephoneNumber = resultSet.getString("telephone_number");
-                    String destinationDetails = resultSet.getString("destination_details");
-                    booking = new Booking(id, orderNumber, customerName, address, telephoneNumber, destinationDetails);
+                    String telephoneNumber = resultSet.getString("telephone");
+                    String destinationDetails = resultSet.getString("destination");
+                    booking = new Booking( orderNumber, customerName, address, telephoneNumber, destinationDetails);
                 }
             }
         } catch (SQLException | ClassNotFoundException e) {

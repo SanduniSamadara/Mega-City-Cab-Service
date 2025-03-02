@@ -8,6 +8,23 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.megacity.model.Booking" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.megacity.dao.daoImpl.BookingDAOImpl" %>
+<%@ page import="com.megacity.dao.facory.BookingDAOFactory" %>
+
+<%
+    // Fetch the list of cars using the DAO factory
+    BookingDAOImpl bookingDAO = (BookingDAOImpl) BookingDAOFactory.getBookingDAO();
+    List<Booking> bookings = bookingDAO.getAllBookings();
+%>
+
+<% String message = request.getParameter("message");
+    if (message != null) { %>
+<div class="alert alert-success" role="alert">
+    <%= message %>
+</div>
+<% } %>
+
+
 <html>
 <head>
     <title>Booking Form</title>
@@ -124,11 +141,9 @@
         </tr>
         </thead>
         <tbody>
-        <%-- Fetch and display the list of bookings --%>
         <%
-            List<Booking> bookings = (List<Booking>) request.getAttribute("bookings");
-            if (bookings != null && !bookings.isEmpty()) {
-                for (Booking booking : bookings) {
+            // Loop through the list of cars and display them in the table
+            for (Booking booking : bookings) {
         %>
         <tr>
             <td><%= booking.getBookingNumber() %></td>
@@ -137,23 +152,21 @@
             <td><%= booking.getTelephone() %></td>
             <td><%= booking.getDestination() %></td>
             <td class="action-buttons">
-                <a href="BookingServlet?action=edit&bookingID=<%= booking.getId() %>">Edit</a> |
-                <a href="BookingServlet?action=delete&bookingID=<%= booking.getId() %>" onclick="return confirm('Are you sure?');">Delete</a>
+                <a href="BookingServlet?action=edit&bookingID=<%= booking.getBookingNumber() %>" class="btn btn-warning btn-sm">Edit</a>
+                <a href="BookingServlet?action=delete&bookingID=<%= booking.getBookingNumber() %>" onclick="return confirm('Are you sure?');" class="btn btn-danger btn-sm">Delete</a>
             </td>
         </tr>
-        <%
-            }
-        } else {
-        %>
-        <tr>
-            <td colspan="6">No bookings available.</td>
-        </tr>
+
+<%--        <tr>--%>
+<%--&lt;%&ndash;            <td colspan="6">No bookings available.</td>&ndash;%&gt;--%>
+<%--        </tr>--%>
         <%
             }
         %>
         </tbody>
     </table>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
