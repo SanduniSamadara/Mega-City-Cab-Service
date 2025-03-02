@@ -152,7 +152,7 @@
             <td><%= booking.getTelephone() %></td>
             <td><%= booking.getDestination() %></td>
             <td class="action-buttons">
-                <a href="BookingServlet?action=edit&bookingID=<%= booking.getBookingNumber() %>" class="btn btn-warning btn-sm">Edit</a>
+                <a href="BookingServlet?action=edit&bookingNumber=<%= booking.getBookingNumber() %>" class="btn btn-warning btn-sm">Edit</a>
                 <a href="BookingServlet?action=delete&bookingNumber=<%= booking.getBookingNumber() %>" onclick="return confirm('Are you sure?');" class="btn btn-danger btn-sm">Delete</a>
             </td>
         </tr>
