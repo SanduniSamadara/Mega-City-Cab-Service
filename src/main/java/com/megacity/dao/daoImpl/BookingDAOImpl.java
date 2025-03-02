@@ -59,13 +59,28 @@ public class BookingDAOImpl implements BookingDAO {
     @Override
     public void deleteBooking(String bookingNumber) throws Exception {
         try (Connection connection = DBConnection.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BOOKING_SQL)) {
-            preparedStatement.setString(1, bookingNumber);
-            preparedStatement.executeUpdate();
+             PreparedStatement checkStatement = connection.prepareStatement("SELECT COUNT(*) FROM bookings WHERE booking_number = ?");
+             PreparedStatement deleteStatement = connection.prepareStatement(DELETE_BOOKING_SQL)) {
+
+            checkStatement.setString(1, bookingNumber);
+            ResultSet rs = checkStatement.executeQuery();
+            if (rs.next() && rs.getInt(1) == 0) {
+                System.out.println("No booking found with number: " + bookingNumber);
+                return;
+            }
+
+            deleteStatement.setString(1, bookingNumber);
+            int rowsDeleted = deleteStatement.executeUpdate();
+            if (rowsDeleted > 0) {
+                System.out.println("Booking deleted successfully.");
+            } else {
+                System.out.println("Failed to delete booking.");
+            }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
+
 
     @Override
     public List<Booking> getAllBookings() {
