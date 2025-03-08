@@ -103,7 +103,7 @@
 <div class="form-container">
     <h1>Add New Booking</h1>
 
-    <form action="BookingServlet" method="post">
+    <form action="payment.jsp" method="post">
         <input type="hidden" name="action" value="insert" />
 
         <label for="orderNumber">Order Number:</label>
@@ -118,10 +118,16 @@
         <label for="telephoneNumber">Telephone Number:</label>
         <input type="text" id="telephoneNumber" name="telephoneNumber" required />
 
-        <label for="destinationDetails">Destination Details:</label>
-        <input type="text" id="destinationDetails" name="destinationDetails" required />
+        <label for="destinationFrom">Destination From:</label>
+        <input type="text" id="destinationFrom" name="destinationFrom" required />
 
-        <input type="submit" value="Add Booking" />
+        <label for="destinationTo">Destination To:</label>
+        <input type="text" id="destinationTo" name="destinationTo" required />
+
+        <label for="distance">Distance(km):</label>
+        <input type="text" id="distance" name="distance" required />
+<%--        <input type="submit" value="Add Booking" />--%>
+        <input type="button" value="Next" />
     </form>
 </div>
 

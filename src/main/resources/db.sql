@@ -74,3 +74,16 @@ INSERT INTO cars (name, plate_number, year, price, model) VALUES
                                                               ('Ford Focus', 'FOC456', 2017, 18000.00, 'Focus'),
                                                               ('Chevrolet Malibu', 'CHEV111', 2020, 25000.00, 'Malibu'),
                                                               ('Nissan Altima', 'ALT222', 2021, 27000.00, 'Altima');
+
+CREATE TABLE car_booking (
+                          booking_number VARCHAR(50) PRIMARY KEY,
+                          customer_name VARCHAR(255) NOT NULL,
+                          address VARCHAR(255) NOT NULL,
+                          telephone VARCHAR(50) NOT NULL,
+                          destination_from VARCHAR(255) NOT NULL,
+                          destination_to VARCHAR(255) NOT NULL
+);
+
+INSERT INTO car_booking (booking_number, customer_name, address, telephone, destination_from, destination_to) VALUES
+                                                                                          ('B001', 'John Doe', '123 Main St, Colombo', '0711234567', 'Galle', 'Matara'),
+                                                                                          ('B002', 'Jane Smith', '456 Park Rd, Colombo', '0779876543', 'Kandy', 'Kurunegala');
