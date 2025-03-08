@@ -2,10 +2,13 @@ package com.megacity.controller;
 
 import com.megacity.dao.BookingDAO;
 import com.megacity.dao.DriverDAO;
+import com.megacity.dao.PaymentDAO;
 import com.megacity.dao.facory.BookingDAOFactory;
 import com.megacity.dao.facory.DriverDAOFactory;
+import com.megacity.dao.facory.PaymentDAOFactory;
 import com.megacity.model.Booking;
 import com.megacity.model.Driver;
+import com.megacity.model.Payment;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -28,6 +31,10 @@ public class BookingServlet extends HttpServlet {
         String destinationFrom = request.getParameter("destinationFrom");
         String destinationTo = request.getParameter("destinationTo");
         double distance = Double.parseDouble(request.getParameter("distance"));
+        double amount = Double.parseDouble(request.getParameter("amount"));
+        String paymentMethod = request.getParameter("paymentMethod");
+        String status = "Pending";  // You can set status based on your logic
+        String currentDate = request.getParameter("date");
 
         // Create a new booking object
         Booking newBooking = new Booking(orderNumber, customerName, address, telephoneNumber, destinationFrom, destinationTo, distance);
@@ -36,6 +43,10 @@ public class BookingServlet extends HttpServlet {
         BookingDAO bookingDAO = BookingDAOFactory.getBookingDAO();
         try {
             bookingDAO.addBooking(newBooking);
+
+            Payment payment = new Payment(orderNumber, amount, paymentMethod, status, currentDate);  // Assuming Payment is a class
+            PaymentDAO paymentDAO = PaymentDAOFactory.getPaymentDAO();
+            paymentDAO.addPayment(payment);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
