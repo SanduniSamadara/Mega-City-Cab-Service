@@ -90,3 +90,14 @@ INSERT INTO car_booking (booking_number, customer_name, address, telephone, dest
                                                                                           ('B001', 'John Doe', '123 Main St, Colombo', '0711234567', 'Galle', 'Matara'),
                                                                                           ('B002', 'Jane Smith', '456 Park Rd, Colombo', '0779876543', 'Kandy', 'Kurunegala');
 
+CREATE TABLE payment (
+                         payment_id INT AUTO_INCREMENT PRIMARY KEY,
+                         booking_number VARCHAR(50) NOT NULL,
+                         amount DOUBLE NOT NULL,
+                         payment_method VARCHAR(50) NOT NULL,
+                         payment_status VARCHAR(50) DEFAULT 'Pending',
+                         payment_date  VARCHAR(50) ,
+                         transaction_id VARCHAR(100),
+                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                         FOREIGN KEY (booking_number) REFERENCES car_booking(booking_number) ON DELETE CASCADE
+);
