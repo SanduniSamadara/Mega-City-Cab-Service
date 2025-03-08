@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 public class PaymentDAOImpl implements PaymentDAO {
 
-    private static final String INSERT_PAYMENT_SQL = "INSERT INTO payment (order_number, amount, payment_method, status, payment_date) VALUES (?, ?, ?, ?, ?)";
+    private static final String INSERT_PAYMENT_SQL = "INSERT INTO payment (booking_number, amount, payment_method, payment_status, payment_date) VALUES (?, ?, ?, ?, ?)";
 
     @Override
     public void addPayment(Payment payment) throws SQLException {

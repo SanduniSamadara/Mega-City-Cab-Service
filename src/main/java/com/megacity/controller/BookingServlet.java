@@ -30,11 +30,25 @@ public class BookingServlet extends HttpServlet {
         String telephoneNumber = request.getParameter("telephoneNumber");
         String destinationFrom = request.getParameter("destinationFrom");
         String destinationTo = request.getParameter("destinationTo");
-        double distance = Double.parseDouble(request.getParameter("distance"));
+//        double distance = Double.parseDouble(request.getParameter("distance"));
         double amount = Double.parseDouble(request.getParameter("amount"));
         String paymentMethod = request.getParameter("paymentMethod");
         String status = "Pending";  // You can set status based on your logic
         String currentDate = request.getParameter("date");
+
+
+        String distanceStr = request.getParameter("distance");
+        distanceStr = distanceStr.replaceAll("[^0-9.]", "");  // Remove anything that is not a number or dot
+
+        // Now parse the cleaned distance
+        double distance = 0;
+        try {
+            distance = Double.parseDouble(distanceStr);
+        } catch (NumberFormatException e) {
+            // Handle invalid number format if necessary
+            // For example, set a default value or show an error message
+            e.printStackTrace();
+        }
 
         // Create a new booking object
         Booking newBooking = new Booking(orderNumber, customerName, address, telephoneNumber, destinationFrom, destinationTo, distance);
