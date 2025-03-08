@@ -14,6 +14,8 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+<%--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAW684kX04SvFpSFyuFKIEnSn17lbqegLM&libraries=places" async defer></script>--%>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuE7Y6ZroRrz93R-PPmG2n4H_btKOU398&libraries=places" async defer></script>
 
 <%
     // Fetch the list of cars using the DAO factory
@@ -32,6 +34,10 @@
 <html>
 <head>
     <title>Booking Form</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -131,7 +137,7 @@
         <select id="destinationTo" name="destinationTo"></select>
 
         <label for="distance">Distance(km):</label>
-        <input type="text" id="distance" name="distance" required />
+        <input type="text" id="distance" name="distance"  />
 <%--        <input type="submit" value="Add Booking" />--%>
         <input type="submit" value="Next" />
     </form>
@@ -237,7 +243,7 @@
         function loadDistricts() {
             $.getJSON('districts.json', function(data) {
                 // Loop through the districts and append them to the dropdown
-                var options = '';
+                var options = '<option value="" selected disabled>Select a destination</option>';
                 data.forEach(function(district) {
                     options += '<option value="' + district + '">' + district + '</option>';
                 });
@@ -253,6 +259,37 @@
 
         // Load the districts dynamically
         loadDistricts();
+
+        $('#destinationFrom, #destinationTo').change(function() {
+            var from = $('#destinationFrom').val();
+            var to = $('#destinationTo').val();
+
+            if (from && to) {
+                calculateDistance(from, to);
+            }
+        });
+
+        function calculateDistance(from, to) {
+            var service = new google.maps.DistanceMatrixService();
+            service.getDistanceMatrix(
+                {
+                    origins: [from],  // From location (must be a valid address or lat/lng)
+                    destinations: [to],  // To location (must be a valid address or lat/lng)
+                    travelMode: google.maps.TravelMode.DRIVING,
+                },
+                function(response, status) {
+                    if (status == google.maps.DistanceMatrixStatus.OK) {
+                        var originList = response.originAddresses;
+                        var destinationList = response.destinationAddresses;
+                        var distance = response.rows[0].elements[0].distance.text;  // Get the distance text
+                        $('#distance').val(distance);  // Display the distance in the input field
+                        console.log("Distance: " + distance);
+                    } else {
+                        alert("Error with Distance Matrix request: " + status);
+                    }
+                }
+            );
+        }
     });
 
 </script>
