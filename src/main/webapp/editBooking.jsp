@@ -1,6 +1,4 @@
-<%@ page import="com.megacity.dao.BookingDAO" %>
-<%@ page import="com.megacity.dao.facory.BookingDAOFactory" %>
-<%@ page import="com.megacity.model.Booking" %><%--
+<%--
   Created by IntelliJ IDEA.
   User: Samadhara
   Date: 3/2/2025
@@ -10,50 +8,84 @@
 
 
 
-<%
-  String bookingNumber = request.getParameter("bookingNumber");
-  BookingDAO bookingDAO = BookingDAOFactory.getBookingDAO();
-  Booking booking = null;
+<<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="com.megacity.model.Booking" %>
 
-  try {
-    booking = bookingDAO.getBookingByNumber(bookingNumber);
-  } catch (Exception e) {
-    e.printStackTrace();
+<%
+  Booking booking = (Booking) request.getAttribute("booking");
+  if (booking == null) {
+    response.sendRedirect("booking.jsp"); // Redirect if no booking data is found
+    return;
   }
 %>
 
-<!DOCTYPE html>
 <html>
 <head>
   <title>Edit Booking</title>
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    .form-container {
+      width: 50%;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .form-container h1 {
+      text-align: center;
+    }
+    .form-container label {
+      display: block;
+      margin: 10px 0 5px;
+    }
+    .form-container input[type="text"],
+    .form-container input[type="submit"] {
+      width: 100%;
+      padding: 8px;
+      margin: 5px 0 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .form-container input[type="submit"] {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .form-container input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+  </style>
 </head>
 <body>
-<h2>Edit Booking</h2>
 
-<% if (booking != null) { %>
-<form action="BookingServlet?action=update" method="post">
-  <input type="hidden" name="bookingNumber" value="<%= booking.getBookingNumber() %>">
+<div class="form-container">
+  <h1>Edit Booking</h1>
+  <form action="BookingServlet" method="post">
+    <input type="hidden" name="action" value="update" />
+    <input type="hidden" name="bookingNumber" value="<%= booking.getBookingNumber() %>" />
 
-  <label for="bookingNo">Booking No:</label>
-  <input type="text" id="bookingNo" name="bookingNo" value="<%= booking.getBookingNumber() %>" required>
+    <label for="customerName">Customer Name:</label>
+    <input type="text" id="customerName" name="customerName" value="<%= booking.getCustomerName() %>" required />
 
-  <label for="customerName">Customer Name:</label>
-  <input type="text" id="customerName" name="customerName" value="<%= booking.getCustomerName() %>" required>
+    <label for="address">Address:</label>
+    <input type="text" id="address" name="address" value="<%= booking.getAddress() %>" required />
 
-  <label for="address">Date:</label>
-  <input type="text" id="address" name="address" value="<%= booking.getAddress() %>" required>
+    <label for="telephoneNumber">Telephone Number:</label>
+    <input type="text" id="telephoneNumber" name="telephoneNumber" value="<%= booking.getTelephone() %>" required />
 
-  <label for="telephone">Time:</label>
-  <input type="number" id="telephone" name="telephone" value="<%= booking.getTelephone() %>" required>
+    <label for="destinationDetails">Destination Details:</label>
+    <input type="text" id="destinationDetails" name="destinationDetails" value="<%= booking.getDestination() %>" required />
 
-  <label for="destination">Service:</label>
-  <input type="text" id="destination" name="destination" value="<%= booking.getDestination() %>" required>
+    <input type="submit" value="Update Booking" />
+  </form>
+</div>
 
-  <input type="submit" value="Update Booking">
-</form>
-<% } else { %>
-<p>Booking not found.</p>
-<% } %>
 </body>
 </html>

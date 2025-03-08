@@ -167,6 +167,58 @@
     </table>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function addBooking() {
+        // Get form values
+        let orderNumber = document.getElementById("orderNumber").value;
+        let customerName = document.getElementById("customerName").value;
+        let address = document.getElementById("address").value;
+        let telephoneNumber = document.getElementById("telephoneNumber").value;
+        let destinationDetails = document.getElementById("destinationDetails").value;
 
+        if (!orderNumber || !customerName || !address || !telephoneNumber || !destinationDetails) {
+            alert("Please fill all fields.");
+            return;
+        }
+
+        // Create a new row
+        let table = document.getElementById("bookingTable").getElementsByTagName('tbody')[0];
+        let newRow = table.insertRow();
+
+        newRow.innerHTML = `
+            <td>${orderNumber}</td>
+            <td>${customerName}</td>
+            <td>${address}</td>
+            <td>${telephoneNumber}</td>
+            <td>${destinationDetails}</td>
+            <td class="action-buttons">
+                <button onclick="editRow(this)">Edit</button>
+                <button onclick="deleteRow(this)">Delete</button>
+            </td>
+        `;
+
+        // Clear form fields
+        document.getElementById("bookingForm").reset();
+    }
+
+    function editRow(button) {
+        let row = button.closest("tr");
+        let cells = row.getElementsByTagName("td");
+
+        document.getElementById("orderNumber").value = cells[0].innerText;
+        document.getElementById("customerName").value = cells[1].innerText;
+        document.getElementById("address").value = cells[2].innerText;
+        document.getElementById("telephoneNumber").value = cells[3].innerText;
+        document.getElementById("destinationDetails").value = cells[4].innerText;
+
+        // Remove the row from the table
+        row.remove();
+    }
+
+    function deleteRow(button) {
+        let row = button.closest("tr");
+        row.remove();
+    }
+</script>
 </body>
 </html>

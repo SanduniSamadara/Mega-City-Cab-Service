@@ -1,9 +1,13 @@
 package com.megacity.controller;
 
 import com.megacity.dao.BookingDAO;
+import com.megacity.dao.DriverDAO;
 import com.megacity.dao.facory.BookingDAOFactory;
+import com.megacity.dao.facory.DriverDAOFactory;
 import com.megacity.model.Booking;
+import com.megacity.model.Driver;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -42,16 +46,35 @@ public class BookingServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
 
-        // Handle delete action
+        if ("edit".equals(action)) {
+            String bookingNumber = request.getParameter("bookingNumber");
+            if (bookingNumber != null && !bookingNumber.isEmpty()) {
+                try {
+                    BookingDAO bookingDAO = BookingDAOFactory.getBookingDAO();
+                    Booking booking = bookingDAO.getBookingByNumber(bookingNumber);
+
+                    if (booking != null) {
+                        request.setAttribute("booking", booking);
+                        RequestDispatcher rd = request.getRequestDispatcher("editBooking.jsp");
+                        rd.forward(request, response);
+                        return; // Ensure no further execution
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            response.sendRedirect("booking.jsp"); // Redirect if no valid booking found
+        }
+
         if ("delete".equals(action)) {
             String bookingNumber = request.getParameter("bookingNumber");
             BookingDAO bookingDAO = BookingDAOFactory.getBookingDAO();
             try {
-                bookingDAO.deleteBooking(bookingNumber);// Delete the booking from the database
+                bookingDAO.deleteBooking(bookingNumber);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            response.sendRedirect("booking.jsp"); // Redirect back to the booking page after deletion
+            response.sendRedirect("booking.jsp");
         }
     }
 }
