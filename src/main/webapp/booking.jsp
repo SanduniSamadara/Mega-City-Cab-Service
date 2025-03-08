@@ -11,6 +11,10 @@
 <%@ page import="com.megacity.dao.daoImpl.BookingDAOImpl" %>
 <%@ page import="com.megacity.dao.facory.BookingDAOFactory" %>
 
+<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
 <%
     // Fetch the list of cars using the DAO factory
     BookingDAOImpl bookingDAO = (BookingDAOImpl) BookingDAOFactory.getBookingDAO();
@@ -119,15 +123,17 @@
         <input type="text" id="telephoneNumber" name="telephoneNumber" required />
 
         <label for="destinationFrom">Destination From:</label>
-        <input type="text" id="destinationFrom" name="destinationFrom" required />
+<%--        <input type="text" id="destinationFrom" name="destinationFrom" required />--%>
+        <select id="destinationFrom" name="destinationFrom"></select>
 
         <label for="destinationTo">Destination To:</label>
-        <input type="text" id="destinationTo" name="destinationTo" required />
+<%--        <input type="text" id="destinationTo" name="destinationTo" required />--%>
+        <select id="destinationTo" name="destinationTo"></select>
 
         <label for="distance">Distance(km):</label>
         <input type="text" id="distance" name="distance" required />
 <%--        <input type="submit" value="Add Booking" />--%>
-        <input type="button" value="Next" />
+        <input type="submit" value="Next" />
     </form>
 </div>
 
@@ -225,6 +231,30 @@
         let row = button.closest("tr");
         row.remove();
     }
+
+    $(document).ready(function() {
+        // Function to populate dropdown with Sri Lankan districts
+        function loadDistricts() {
+            $.getJSON('districts.json', function(data) {
+                // Loop through the districts and append them to the dropdown
+                var options = '';
+                data.forEach(function(district) {
+                    options += '<option value="' + district + '">' + district + '</option>';
+                });
+                $('#destinationFrom, #destinationTo').html(options);
+            });
+        }
+
+        // Apply Select2 to the dropdowns
+        $('#destinationFrom, #destinationTo').select2({
+            placeholder: "Select a district",
+            allowClear: true
+        });
+
+        // Load the districts dynamically
+        loadDistricts();
+    });
+
 </script>
 </body>
 </html>
