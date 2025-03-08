@@ -46,11 +46,13 @@
     <input type="hidden" name="telephoneNumber" value="<%= telephoneNumber %>" />
     <input type="hidden" name="destinationFrom" value="<%= destinationFrom %>" />
     <input type="hidden" name="destinationTo" value="<%= destinationTo %>" />
-    <input type="hidden" name="distance" value="<%= distance != null ? distance : "" %>" />
+    <input type="hidden" name="distance" value="<%= distance != null ? distance : "" %>"  oninput="calculateAmount()"/>
 
     <!-- Payment Fields -->
     <label for="amount">Amount (LKR):</label>
     <input type="number" id="amount" name="amount" required />
+
+    <input type="hidden" id="hiddenDistance" name="hiddenDistance" />
 
     <label for="paymentMethod">Payment Method:</label>
     <select id="paymentMethod" name="paymentMethod">
@@ -106,6 +108,42 @@
 
         // Prevent form submission to simulate payment completion process
         event.preventDefault();  // Uncomment to prevent actual form submission
+    }
+
+    function calculateAmount() {
+        console.log("calculateAmount called");  // Debug to check if function is triggered
+
+        const ratePerKm = 50; // Rate: 1 km = 50
+
+        // Get the value from the distance input field
+        const distanceInput = document.querySelector('input[name="distance"]');
+        let distance = distanceInput.value;
+
+        // Remove any non-numeric characters (e.g., "km")
+        distance = distance.replace(/[^\d.-]/g, ''); // Remove any non-digit characters except for '.' and '-'
+
+        // Log the distance value after cleaning
+        console.log("Cleaned distance:", distance);
+
+        // Check if the distance value is valid (and is a number greater than 0)
+        if (distance && !isNaN(distance) && parseFloat(distance) > 0) {
+            const amount = parseFloat(distance) * ratePerKm;
+            console.log("Calculated amount:", amount);  // Log the calculated amount
+            document.getElementById("amount").value = amount;  // Set the calculated amount
+            document.getElementById("hiddenDistance").value = distance;  // Store the distance
+        } else {
+            console.log("Invalid distance entered.");
+            document.getElementById("amount").value = '';  // Clear amount if input is invalid
+            document.getElementById("hiddenDistance").value = '';  // Clear hidden field
+            // Optionally alert the user
+            // alert("Please enter a valid distance in km");
+        }
+    }
+
+
+    // Automatically calculate the amount when the page loads
+    window.onload = function() {
+        calculateAmount();  // Call the function on page load
     }
 </script>
 </body>
