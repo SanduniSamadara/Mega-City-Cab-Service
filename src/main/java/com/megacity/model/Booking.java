@@ -5,15 +5,18 @@ public class Booking {
     private String customerName;
     private String address;
     private String telephone;
-    private String destination;
+    private String destinationFrom;
+    private String destinationTo;
+    private double distance;
 
-    public Booking(String bookingNumber, String customerName, String address, String telephone, String destination) {
+    public Booking(String bookingNumber, String customerName, String address, String telephone, String destinationFrom, String destinationTo, double distance) {
         this.bookingNumber = bookingNumber;
         this.customerName = customerName;
         this.address = address;
         this.telephone = telephone;
-        this.destination = destination;
-    }
+        this.destinationFrom = destinationFrom;
+        this.destinationTo = destinationTo;
+        this.distance = distance;    }
 
     public Booking() {
     }
@@ -43,17 +46,34 @@ public class Booking {
     public void setTelephone(String telephone) {
         this.telephone = telephone;
     }
-    public String getDestination() {
-        return destination;
-    }
-    public void setDestination(String destination) {
-        this.destination = destination;
+
+    public String getDestinationFrom() {
+        return destinationFrom;
     }
 
+    public void setDestinationFrom(String destinationFrom) {
+        this.destinationFrom = destinationFrom;
+    }
+
+    public String getDestinationTo() {
+        return destinationTo;
+    }
+
+    public void setDestinationTo(String destinationTo) {
+        this.destinationTo = destinationTo;
+    }
+
+    public Double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
 
     @Override
     public String toString() {
         return "Booking [ bookingNumber=" + bookingNumber + ", customerName=" + customerName +
-                ", address=" + address + ", telephone=" + telephone + ", destination=" + destination + "]";
+                ", address=" + address + ", telephone=" + telephone + ", destinationFrom=" + destinationFrom + ", destinationTo=" + destinationTo + ", distance=" + distance +"]";
     }
 }

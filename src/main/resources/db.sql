@@ -81,9 +81,12 @@ CREATE TABLE car_booking (
                           address VARCHAR(255) NOT NULL,
                           telephone VARCHAR(50) NOT NULL,
                           destination_from VARCHAR(255) NOT NULL,
-                          destination_to VARCHAR(255) NOT NULL
+                          destination_to VARCHAR(255) NOT NULL,
+                          distance DOUBLE NOT NULL,
+                          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 INSERT INTO car_booking (booking_number, customer_name, address, telephone, destination_from, destination_to) VALUES
                                                                                           ('B001', 'John Doe', '123 Main St, Colombo', '0711234567', 'Galle', 'Matara'),
                                                                                           ('B002', 'Jane Smith', '456 Park Rd, Colombo', '0779876543', 'Kandy', 'Kurunegala');
+

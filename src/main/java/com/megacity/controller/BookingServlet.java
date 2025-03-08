@@ -25,10 +25,12 @@ public class BookingServlet extends HttpServlet {
         String customerName = request.getParameter("customerName");
         String address = request.getParameter("address");
         String telephoneNumber = request.getParameter("telephoneNumber");
-        String destinationDetails = request.getParameter("destinationDetails");
+        String destinationFrom = request.getParameter("destinationFrom");
+        String destinationTo = request.getParameter("destinationTo");
+        double distance = Double.parseDouble(request.getParameter("distance"));
 
         // Create a new booking object
-        Booking newBooking = new Booking(orderNumber, customerName, address, telephoneNumber, destinationDetails);
+        Booking newBooking = new Booking(orderNumber, customerName, address, telephoneNumber, destinationFrom, destinationTo, distance);
 
         // Get the DAO instance and add the booking
         BookingDAO bookingDAO = BookingDAOFactory.getBookingDAO();

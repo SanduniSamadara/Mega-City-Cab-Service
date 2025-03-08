@@ -14,11 +14,11 @@ import java.util.List;
 
 public class BookingDAOImpl implements BookingDAO {
 
-    private static final String ADD_BOOKING_SQL = "INSERT INTO bookings (booking_number, customer_name, address, telephone, destination) VALUES (?, ?, ?, ?, ?)";
-    private static final String UPDATE_BOOKING_SQL = "UPDATE bookings SET booking_number = ?, customer_name = ?, address = ?, telephone = ?, destination = ? WHERE booking_number = ?";
-    private static final String DELETE_BOOKING_SQL = "DELETE FROM bookings WHERE booking_number = ?";
-    private static final String GET_ALL_BOOKINGS_SQL = "SELECT * FROM bookings";
-    private static final String GET_BOOKING_BY_ID_SQL = "SELECT * FROM bookings WHERE booking_number = ?";
+    private static final String ADD_BOOKING_SQL = "INSERT INTO car_booking (booking_number, customer_name, address, telephone, destination_from, destination_to, distance) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    private static final String UPDATE_BOOKING_SQL = "UPDATE car_booking SET booking_number = ?, customer_name = ?, address = ?, telephone = ?, destination = ? WHERE booking_number = ?";
+    private static final String DELETE_BOOKING_SQL = "DELETE FROM car_booking WHERE booking_number = ?";
+    private static final String GET_ALL_BOOKINGS_SQL = "SELECT * FROM car_booking";
+    private static final String GET_BOOKING_BY_ID_SQL = "SELECT * FROM car_booking WHERE booking_number = ?";
 
     @Override
     public void addBooking(Booking booking) {
@@ -28,7 +28,10 @@ public class BookingDAOImpl implements BookingDAO {
             preparedStatement.setString(2, booking.getCustomerName());
             preparedStatement.setString(3, booking.getAddress());
             preparedStatement.setString(4, booking.getTelephone());
-            preparedStatement.setString(5, booking.getDestination());
+            preparedStatement.setString(5, booking.getDestinationFrom());
+            preparedStatement.setString(6, booking.getDestinationTo());
+            preparedStatement.setDouble(7, booking.getDistance());
+
             preparedStatement.executeUpdate();
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -48,7 +51,9 @@ public class BookingDAOImpl implements BookingDAO {
             preparedStatement.setString(2, booking.getCustomerName());
             preparedStatement.setString(3, booking.getAddress());
             preparedStatement.setString(4, booking.getTelephone());
-            preparedStatement.setString(5, booking.getDestination());
+            preparedStatement.setString(5, booking.getDestinationFrom());
+            preparedStatement.setString(6, booking.getDestinationTo());
+            preparedStatement.setDouble(7, booking.getDistance());
 //            preparedStatement.setInt(6, booking.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException | ClassNotFoundException e) {
@@ -94,8 +99,10 @@ public class BookingDAOImpl implements BookingDAO {
                 String customerName = resultSet.getString("customer_name");
                 String address = resultSet.getString("address");
                 String telephoneNumber = resultSet.getString("telephone");
-                String destinationDetails = resultSet.getString("destination");
-                bookings.add(new Booking( orderNumber, customerName, address, telephoneNumber, destinationDetails));
+                String destinationFrom = resultSet.getString("destinationFrom");
+                String destinationTo = resultSet.getString("destinationTo");
+                Double distance = Double.parseDouble(resultSet.getString("distance"));
+                bookings.add(new Booking( orderNumber, customerName, address, telephoneNumber, destinationFrom, destinationTo, distance));
             }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -116,8 +123,10 @@ public class BookingDAOImpl implements BookingDAO {
                     String customerName = resultSet.getString("customer_name");
                     String address = resultSet.getString("address");
                     String telephoneNumber = resultSet.getString("telephone");
-                    String destinationDetails = resultSet.getString("destination");
-                    booking = new Booking( orderNumber, customerName, address, telephoneNumber, destinationDetails);
+                    String destinationFrom = resultSet.getString("destinationFrom");
+                    String destinationTo = resultSet.getString("destinationTo");
+                    Double distance = Double.parseDouble(resultSet.getString("distance"));
+                    booking = new Booking( orderNumber, customerName, address, telephoneNumber, destinationFrom, destinationTo, distance);
                 }
             }
         } catch (SQLException | ClassNotFoundException e) {
