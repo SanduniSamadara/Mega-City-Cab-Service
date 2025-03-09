@@ -54,7 +54,7 @@ public class BookingDAOImpl implements BookingDAO {
             preparedStatement.setString(5, booking.getDestinationFrom());
             preparedStatement.setString(6, booking.getDestinationTo());
             preparedStatement.setDouble(7, booking.getDistance());
-//            preparedStatement.setInt(6, booking.getId());
+//            preparedStatement.setInt(8, booking.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
