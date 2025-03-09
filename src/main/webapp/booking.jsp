@@ -10,6 +10,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.megacity.dao.daoImpl.BookingDAOImpl" %>
 <%@ page import="com.megacity.dao.facory.BookingDAOFactory" %>
+<%@ page import="java.sql.*, java.util.*" %>
 
 <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -30,10 +31,74 @@
 </div>
 <% } %>
 
+<%
+    // Define database connection parameters
+    String url = "jdbc:mysql://localhost:3306/megacitycab";
+    String user = "root";
+    String password = "1234";
+    Connection connection = null;
+    Statement statement = null;
+    ResultSet resultSet = null;
+
+    // Initialize lists to hold data
+    List<String> customers = new ArrayList<>();
+    List<String> drivers = new ArrayList<>();
+    List<String> vehicles = new ArrayList<>();
+
+    try {
+        // Establish connection
+        connection = DriverManager.getConnection(url, user, password);
+
+        // Fetch customers
+        statement = connection.createStatement();
+        resultSet = statement.executeQuery("SELECT registration_number, name FROM customers");
+
+        while (resultSet.next()) {
+            String customerId = resultSet.getString("registration_number");
+            String customerName = resultSet.getString("name");
+            customers.add(customerId + ":" + customerName);
+
+        }
+
+
+        // Fetch drivers
+        resultSet = statement.executeQuery("SELECT id, name FROM drivers");
+
+        while (resultSet.next()) {
+            String driverId = resultSet.getString("id");
+            String driverName = resultSet.getString("name");
+            drivers.add(driverId + ":" + driverName);
+        }
+
+        // Fetch vehicles
+        resultSet = statement.executeQuery("SELECT id, name FROM cars");
+        while (resultSet.next()) {
+            vehicles.add(resultSet.getString("id") + ":" + resultSet.getString("name"));
+        }
+        while (resultSet.next()) {
+            String vehicleId = resultSet.getString("id");
+            String vehicleName = resultSet.getString("name");
+            vehicles.add(vehicleId + ":" + vehicleName);
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } finally {
+        // Close resources
+        try {
+            if (resultSet != null) resultSet.close();
+            if (statement != null) statement.close();
+            if (connection != null) connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+%>
 
 <html>
 <head>
     <title>Booking Form</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
@@ -94,17 +159,17 @@
         th {
             background-color: #f2f2f2;
         }
-        .action-buttons a {
-            padding: 5px 10px;
-            margin: 2px;
-            background-color: #f1f1f1;
-            border-radius: 4px;
-            color: #333;
-            text-decoration: none;
-        }
-        .action-buttons a:hover {
-            background-color: #ddd;
-        }
+        /*.action-buttons a {*/
+        /*    padding: 5px 10px;*/
+        /*    margin: 2px;*/
+        /*    background-color: #f1f1f1;*/
+        /*    border-radius: 4px;*/
+        /*    color: #333;*/
+        /*    text-decoration: none;*/
+        /*}*/
+        /*.action-buttons a:hover {*/
+        /*    background-color: #ddd;*/
+        /*}*/
     </style>
 </head>
 <body>
@@ -120,13 +185,43 @@
         <input type="text" id="orderNumber" name="orderNumber" required />
 
         <label for="customerName">Customer Name:</label>
-        <input type="text" id="customerName" name="customerName" required />
+        <select id="customerName" name="customerName" required>
+            <option value="" selected disabled>Select Customer</option>
+            <%
+                for (String customer : customers) {
+                    String[] customerData = customer.split(":");
+                    String customerId = customerData[0];
+                    String customerName = customerData[1];
+            %>
+            <option value="<%= customerId %>"><%= customerId %> - <%= customerName %></option>
+            <% } %>
+        </select>
 
-        <label for="address">Address:</label>
-        <input type="text" id="address" name="address" required />
+        <label for="driver">Driver:</label>
+        <select id="driver" name="driver" >
+            <option value="" selected disabled>Select Driver</option>
+            <%
+                for (String driver : drivers) {
+                    String[] driverData = driver.split(":");
+                    String driverId = driverData[0];
+                    String driverName = driverData[1];
+            %>
+            <option value="<%= driverId %>"><%= driverId %> - <%= driverName %></option>
+            <% } %>
+        </select>
 
-        <label for="telephoneNumber">Telephone Number:</label>
-        <input type="text" id="telephoneNumber" name="telephoneNumber" required />
+        <label for="vehicle">Vehicle:</label>
+        <select id="vehicle" name="vehicle" >
+            <option value="" selected disabled>Select Vehicle</option>
+            <%
+                for (String vehicle : vehicles) {
+                    String[] vehicleData = vehicle.split(":");
+                    String vehicleId = vehicleData[0];
+                    String vehicleName = vehicleData[1];
+            %>
+            <option value="<%= vehicleId %>"><%= vehicleName %></option>
+            <% } %>
+        </select>
 
         <label for="destinationFrom">Destination From:</label>
 <%--        <input type="text" id="destinationFrom" name="destinationFrom" required />--%>
@@ -139,7 +234,7 @@
         <label for="distance">Distance(km):</label>
         <input type="text" id="distance" name="distance"  />
 <%--        <input type="submit" value="Add Booking" />--%>
-        <input type="submit" value="Next" />
+        <input type="submit" value="Next" onclick="location.href='car.jsp'"/>
     </form>
 </div>
 
@@ -152,9 +247,11 @@
         <tr>
             <th>Order Number</th>
             <th>Customer Name</th>
-            <th>Address</th>
-            <th>Telephone Number</th>
-            <th>Destination Details</th>
+            <th>Vehicle</th>
+            <th>Driver Name</th>
+            <th>Destination From</th>
+            <th>Destination To</th>
+            <th>Distance</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -166,14 +263,14 @@
         <tr>
             <td><%= booking.getBookingNumber() %></td>
             <td><%= booking.getCustomerName() %></td>
-            <td><%= booking.getAddress() %></td>
-            <td><%= booking.getTelephone() %></td>
+            <td><%= booking.getVehicle() %></td>
+            <td><%= booking.getDriver() %></td>
             <td><%= booking.getDestinationFrom() %></td>
             <td><%= booking.getDestinationTo() %></td>
             <td><%= booking.getDistance() %></td>
             <td class="action-buttons">
-                <a href="BookingServlet?action=edit&bookingNumber=<%= booking.getBookingNumber() %>" class="btn btn-warning btn-sm">Edit</a>
-                <a href="BookingServlet?action=delete&bookingNumber=<%= booking.getBookingNumber() %>" onclick="return confirm('Are you sure?');" class="btn btn-danger btn-sm">Delete</a>
+                <a href="BookingServlet?action=edit&bookingNumber=<%= booking.getBookingNumber() %>" class="btn btn-warning btn-sm edit">Edit</a>
+                <a href="BookingServlet?action=delete&bookingNumber=<%= booking.getBookingNumber() %>" onclick="return confirm('Are you sure?');" class="btn btn-danger btn-sm delete">Delete</a>
             </td>
         </tr>
 
@@ -192,11 +289,13 @@
         // Get form values
         let orderNumber = document.getElementById("orderNumber").value;
         let customerName = document.getElementById("customerName").value;
-        let address = document.getElementById("address").value;
-        let telephoneNumber = document.getElementById("telephoneNumber").value;
-        let destinationDetails = document.getElementById("destinationDetails").value;
+        let address = document.getElementById("driver").value;
+        let telephoneNumber = document.getElementById("vehicle").value;
+        let destinationFrom = document.getElementById("destinationFrom").value;
+        let destinationTo = document.getElementById("destinationTo").value;
+        let distance = document.getElementById("distance").value;
 
-        if (!orderNumber || !customerName || !address || !telephoneNumber || !destinationDetails) {
+        if (!orderNumber || !customerName || !address || !telephoneNumber || !destinationFrom || !destinationTo || !distance) {
             alert("Please fill all fields.");
             return;
         }
@@ -210,7 +309,9 @@
             <td>${customerName}</td>
             <td>${address}</td>
             <td>${telephoneNumber}</td>
-            <td>${destinationDetails}</td>
+            <td>${destinationFrom}</td>
+             <td>${destinationTo}</td>
+              <td>${distance}</td>
             <td class="action-buttons">
                 <button onclick="editRow(this)">Edit</button>
                 <button onclick="deleteRow(this)">Delete</button>
@@ -229,8 +330,9 @@
         document.getElementById("customerName").value = cells[1].innerText;
         document.getElementById("address").value = cells[2].innerText;
         document.getElementById("telephoneNumber").value = cells[3].innerText;
-        document.getElementById("destinationDetails").value = cells[4].innerText;
-
+        document.getElementById("destinationFrom").value = cells[4].innerText;
+        document.getElementById("destinationTo").value = cells[5].innerText;
+        document.getElementById("distance").value = cells[6].innerText;
         // Remove the row from the table
         row.remove();
     }
@@ -243,9 +345,9 @@
     $(document).ready(function() {
         // Function to populate dropdown with Sri Lankan districts
         function loadDistricts() {
-            $.getJSON('districts.json', function(data) {
+            $.getJSON('towns.json', function(data) {
                 // Loop through the districts and append them to the dropdown
-                var options = '<option value="" selected disabled>Select a destination</option>';
+                var options = '<option value="" selected disabled>Select a Location</option>';
                 data.forEach(function(district) {
                     options += '<option value="' + district + '">' + district + '</option>';
                 });
@@ -255,7 +357,7 @@
 
         // Apply Select2 to the dropdowns
         $('#destinationFrom, #destinationTo').select2({
-            placeholder: "Select a district",
+            placeholder: "Select a Location",
             allowClear: true
         });
 
@@ -275,16 +377,16 @@
             var service = new google.maps.DistanceMatrixService();
             service.getDistanceMatrix(
                 {
-                    origins: [from],  // From location (must be a valid address or lat/lng)
-                    destinations: [to],  // To location (must be a valid address or lat/lng)
+                    origins: [from],
+                    destinations: [to],
                     travelMode: google.maps.TravelMode.DRIVING,
                 },
                 function(response, status) {
                     if (status == google.maps.DistanceMatrixStatus.OK) {
                         var originList = response.originAddresses;
                         var destinationList = response.destinationAddresses;
-                        var distance = response.rows[0].elements[0].distance.text;  // Get the distance text
-                        $('#distance').val(distance);  // Display the distance in the input field
+                        var distance = response.rows[0].elements[0].distance.text;
+                        $('#distance').val(distance);
                         console.log("Distance: " + distance);
                     } else {
                         alert("Error with Distance Matrix request: " + status);

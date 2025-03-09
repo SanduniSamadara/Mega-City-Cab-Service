@@ -22,53 +22,98 @@ import java.io.IOException;
 public class BookingServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Retrieve parameters from the form
-        String orderNumber = request.getParameter("orderNumber");
-        String customerName = request.getParameter("customerName");
-        String address = request.getParameter("address");
-        String telephoneNumber = request.getParameter("telephoneNumber");
-        String destinationFrom = request.getParameter("destinationFrom");
-        String destinationTo = request.getParameter("destinationTo");
-//        double distance = Double.parseDouble(request.getParameter("distance"));
-        double amount = Double.parseDouble(request.getParameter("amount"));
-        String paymentMethod = request.getParameter("paymentMethod");
-        String status = "Pending";  // You can set status based on your logic
-        String currentDate = request.getParameter("date");
+//    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//
+//        String orderNumber = request.getParameter("orderNumber");
+//        String customerName = request.getParameter("customerName");
+//        String address = request.getParameter("vehicle");
+//        String telephoneNumber = request.getParameter("driver");
+//        String destinationFrom = request.getParameter("destinationFrom");
+//        String destinationTo = request.getParameter("destinationTo");
+////        double distance = Double.parseDouble(request.getParameter("distance"));
+//        double amount = Double.parseDouble(request.getParameter("amount"));
+//        String paymentMethod = request.getParameter("paymentMethod");
+//        String status = "Pending";  // You can set status based on your logic
+//        String currentDate = request.getParameter("date");
+//
+//
+//        String distanceStr = request.getParameter("distance");
+//        distanceStr = distanceStr.replaceAll("[^0-9.]", "");
+//
+//
+//        double distance = 0;
+//        try {
+//            distance = Double.parseDouble(distanceStr);
+//        } catch (NumberFormatException e) {
+//            // Handle invalid number format if necessary
+//            // For example, set a default value or show an error message
+//            e.printStackTrace();
+//        }
+//
+//        Booking newBooking = new Booking(orderNumber, customerName, address, telephoneNumber, destinationFrom, destinationTo, distance);
+//
+//        BookingDAO bookingDAO = BookingDAOFactory.getBookingDAO();
+//        try {
+//            bookingDAO.addBooking(newBooking);
+//
+//            Payment payment = new Payment(orderNumber, amount, paymentMethod, status, currentDate);
+//            PaymentDAO paymentDAO = PaymentDAOFactory.getPaymentDAO();
+//            paymentDAO.addPayment(payment);
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+////        bookingDAO.addBooking(newBooking); // Add the new booking to the database
+//
+//        // Redirect to the booking page after adding the booking
+//        response.sendRedirect("booking.jsp");
+//    }
 
+protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    String orderNumber = request.getParameter("orderNumber");
+    String customerName = request.getParameter("customerName");
+    String address = request.getParameter("vehicle");
+    String telephoneNumber = request.getParameter("driver");
+    String destinationFrom = request.getParameter("destinationFrom");
+    String destinationTo = request.getParameter("destinationTo");
+    double amount = Double.parseDouble(request.getParameter("amount"));
+    String paymentMethod = request.getParameter("paymentMethod");
+    String status = "Pending";  // You can set status based on your logic
+    String currentDate = request.getParameter("date");
 
-        String distanceStr = request.getParameter("distance");
-        distanceStr = distanceStr.replaceAll("[^0-9.]", "");  // Remove anything that is not a number or dot
-
-        // Now parse the cleaned distance
-        double distance = 0;
-        try {
-            distance = Double.parseDouble(distanceStr);
-        } catch (NumberFormatException e) {
-            // Handle invalid number format if necessary
-            // For example, set a default value or show an error message
-            e.printStackTrace();
-        }
-
-        // Create a new booking object
-        Booking newBooking = new Booking(orderNumber, customerName, address, telephoneNumber, destinationFrom, destinationTo, distance);
-
-        // Get the DAO instance and add the booking
-        BookingDAO bookingDAO = BookingDAOFactory.getBookingDAO();
-        try {
-            bookingDAO.addBooking(newBooking);
-
-            Payment payment = new Payment(orderNumber, amount, paymentMethod, status, currentDate);  // Assuming Payment is a class
-            PaymentDAO paymentDAO = PaymentDAOFactory.getPaymentDAO();
-            paymentDAO.addPayment(payment);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-//        bookingDAO.addBooking(newBooking); // Add the new booking to the database
-
-        // Redirect to the booking page after adding the booking
-        response.sendRedirect("booking.jsp");
+    // Handle distance input (ensure it's numeric)
+    String distanceStr = request.getParameter("distance");
+    distanceStr = distanceStr.replaceAll("[^0-9.]", "");
+    double distance = 0;
+    try {
+        distance = Double.parseDouble(distanceStr);
+    } catch (NumberFormatException e) {
+        e.printStackTrace();
     }
+
+    // Create a new Booking object
+    Booking newBooking = new Booking(orderNumber, customerName, address, telephoneNumber, destinationFrom, destinationTo, distance);
+
+    // Create a new Payment object
+    Payment payment = new Payment(orderNumber, amount, paymentMethod, status, currentDate);
+
+    // Perform booking and payment insertion
+    BookingDAO bookingDAO = BookingDAOFactory.getBookingDAO();
+    PaymentDAO paymentDAO = PaymentDAOFactory.getPaymentDAO();
+    try {
+        // First, add the new booking
+        bookingDAO.addBooking(newBooking);  // Ensure this executes successfully
+
+        // After the booking is added, proceed with the payment
+        paymentDAO.addPayment(payment);  // Ensure this does not violate foreign key constraint
+    } catch (Exception e) {
+        // Handle exception properly (e.g., log error, rollback transaction, etc.)
+        throw new RuntimeException("Error while adding booking and payment", e);
+    }
+
+    // Redirect to the booking page after adding the booking and payment
+    response.sendRedirect("booking.jsp");
+}
+
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");

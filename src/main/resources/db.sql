@@ -100,3 +100,11 @@ CREATE TABLE payment (
                          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                          FOREIGN KEY (booking_number) REFERENCES car_booking(booking_number) ON DELETE CASCADE
 );
+
+ALTER TABLE car_booking
+    ADD COLUMN vehicle_id VARCHAR(50) NOT NULL,
+    ADD COLUMN driver_id VARCHAR(50) NOT NULL;
+
+ALTER TABLE car_booking
+    DROP COLUMN address,
+    DROP COLUMN telephone;

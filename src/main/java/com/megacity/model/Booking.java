@@ -3,17 +3,17 @@ package com.megacity.model;
 public class Booking {
     private String bookingNumber;
     private String customerName;
-    private String address;
-    private String telephone;
+    private String driver;
+    private String vehicle;
     private String destinationFrom;
     private String destinationTo;
     private double distance;
 
-    public Booking(String bookingNumber, String customerName, String address, String telephone, String destinationFrom, String destinationTo, double distance) {
+    public Booking(String bookingNumber, String customerName, String vehicle, String driver, String destinationFrom, String destinationTo, double distance) {
         this.bookingNumber = bookingNumber;
         this.customerName = customerName;
-        this.address = address;
-        this.telephone = telephone;
+        this.vehicle = vehicle;
+        this.driver = driver;
         this.destinationFrom = destinationFrom;
         this.destinationTo = destinationTo;
         this.distance = distance;    }
@@ -34,17 +34,17 @@ public class Booking {
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
     }
-    public String getAddress() {
-        return address;
+    public String getVehicle() {
+        return vehicle;
     }
-    public void setAddress(String address) {
-        this.address = address;
+    public void setVehicle(String vehicle) {
+        this.vehicle = vehicle;
     }
-    public String getTelephone() {
-        return telephone;
+    public String getDriver() {
+        return driver;
     }
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
+    public void setDriver(String driver) {
+        this.driver = driver;
     }
 
     public String getDestinationFrom() {
@@ -74,6 +74,6 @@ public class Booking {
     @Override
     public String toString() {
         return "Booking [ bookingNumber=" + bookingNumber + ", customerName=" + customerName +
-                ", address=" + address + ", telephone=" + telephone + ", destinationFrom=" + destinationFrom + ", destinationTo=" + destinationTo + ", distance=" + distance +"]";
+                ", vehicle=" + vehicle + ", driver=" + driver + ", destinationFrom=" + destinationFrom + ", destinationTo=" + destinationTo + ", distance=" + distance +"]";
     }
 }

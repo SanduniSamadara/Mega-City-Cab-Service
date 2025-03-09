@@ -9,8 +9,8 @@
 <%
     String orderNumber = request.getParameter("orderNumber");
     String customerName = request.getParameter("customerName");
-    String address = request.getParameter("address");
-    String telephoneNumber = request.getParameter("telephoneNumber");
+    String driver = request.getParameter("driver");
+    String vehicle = request.getParameter("vehicle");
     String destinationFrom = request.getParameter("destinationFrom");
     String destinationTo = request.getParameter("destinationTo");
     String distance = request.getParameter("distance");
@@ -36,14 +36,14 @@
 <body>
 
 <h2>Payment Details</h2>
-<form action="BookingServlet" method="post">
+<form action="BookingServlet" method="post" onsubmit="return showSuccessAlert();">
     <input type="hidden" name="action" value="process_payment" />
 
     <!-- Booking Details -->
     <input type="hidden" name="orderNumber" value="<%= orderNumber %>" />
     <input type="hidden" name="customerName" value="<%= customerName %>" />
-    <input type="hidden" name="address" value="<%= address %>" />
-    <input type="hidden" name="telephoneNumber" value="<%= telephoneNumber %>" />
+    <input type="hidden" name="driver" value="<%= driver %>" />
+    <input type="hidden" name="vehicle" value="<%= vehicle %>" />
     <input type="hidden" name="destinationFrom" value="<%= destinationFrom %>" />
     <input type="hidden" name="destinationTo" value="<%= destinationTo %>" />
     <input type="hidden" name="distance" value="<%= distance != null ? distance : "" %>"  oninput="calculateAmount()"/>
@@ -111,39 +111,36 @@
     }
 
     function calculateAmount() {
-        console.log("calculateAmount called");  // Debug to check if function is triggered
-
         const ratePerKm = 50; // Rate: 1 km = 50
 
-        // Get the value from the distance input field
         const distanceInput = document.querySelector('input[name="distance"]');
         let distance = distanceInput.value;
 
         // Remove any non-numeric characters (e.g., "km")
-        distance = distance.replace(/[^\d.-]/g, ''); // Remove any non-digit characters except for '.' and '-'
+        distance = distance.replace(/[^\d.-]/g, '');
 
-        // Log the distance value after cleaning
         console.log("Cleaned distance:", distance);
 
-        // Check if the distance value is valid (and is a number greater than 0)
         if (distance && !isNaN(distance) && parseFloat(distance) > 0) {
             const amount = parseFloat(distance) * ratePerKm;
-            console.log("Calculated amount:", amount);  // Log the calculated amount
-            document.getElementById("amount").value = amount;  // Set the calculated amount
-            document.getElementById("hiddenDistance").value = distance;  // Store the distance
+            document.getElementById("amount").value = amount;
+            document.getElementById("hiddenDistance").value = distance;
         } else {
             console.log("Invalid distance entered.");
-            document.getElementById("amount").value = '';  // Clear amount if input is invalid
-            document.getElementById("hiddenDistance").value = '';  // Clear hidden field
-            // Optionally alert the user
-            // alert("Please enter a valid distance in km");
+            document.getElementById("amount").value = '';
+            document.getElementById("hiddenDistance").value = '';
+
         }
     }
 
-
-    // Automatically calculate the amount when the page loads
     window.onload = function() {
-        calculateAmount();  // Call the function on page load
+        calculateAmount();
+    }
+
+    function showSuccessAlert() {
+        // Display the success message
+        alert("Booking and Payment Completed Successfully! ");
+        return true;
     }
 </script>
 </body>
