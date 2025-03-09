@@ -64,7 +64,7 @@ public class BookingDAOImpl implements BookingDAO {
     @Override
     public void deleteBooking(String bookingNumber) throws Exception {
         try (Connection connection = DBConnection.getConnection();
-             PreparedStatement checkStatement = connection.prepareStatement("SELECT COUNT(*) FROM bookings WHERE booking_number = ?");
+             PreparedStatement checkStatement = connection.prepareStatement("SELECT COUNT(*) FROM car_booking WHERE booking_number = ?");
              PreparedStatement deleteStatement = connection.prepareStatement(DELETE_BOOKING_SQL)) {
 
             checkStatement.setString(1, bookingNumber);

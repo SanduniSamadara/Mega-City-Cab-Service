@@ -234,7 +234,7 @@
         <label for="distance">Distance(km):</label>
         <input type="text" id="distance" name="distance"  />
 <%--        <input type="submit" value="Add Booking" />--%>
-        <input type="submit" value="Next" onclick="location.href='car.jsp'"/>
+        <input type="submit" value="Next" onclick="location.href='payment.jsp'"/>
     </form>
 </div>
 
