@@ -39,11 +39,6 @@ public class BookingDAOImpl implements BookingDAO {
     }
 
     @Override
-    public Booking getBookingByNumber(String bookingNumber) throws Exception {
-        return null;
-    }
-
-    @Override
     public void updateBooking(Booking booking) {
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_BOOKING_SQL)) {
@@ -111,22 +106,22 @@ public class BookingDAOImpl implements BookingDAO {
     }
 
     @Override
-    public Booking getBookingById(int bookingId) {
+    public Booking getBookingByNumber(String bookingNumber) {
         Booking booking = null;
         try (Connection connection = DBConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_BOOKING_BY_ID_SQL)) {
-            preparedStatement.setInt(1, bookingId);
+            preparedStatement.setString(1, bookingNumber);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
 //                    int id = resultSet.getInt("id");
                     String orderNumber = resultSet.getString("booking_number");
                     String customerName = resultSet.getString("customer_name");
-                    String address = resultSet.getString("vehicle_id");
-                    String telephoneNumber = resultSet.getString("driver_id");
+                    String vehicle = resultSet.getString("vehicle_id");
+                    String driver = resultSet.getString("driver_id");
                     String destinationFrom = resultSet.getString("destination_from");
                     String destinationTo = resultSet.getString("destination_to");
                     Double distance = Double.parseDouble(resultSet.getString("distance"));
-                    booking = new Booking( orderNumber, customerName, address, telephoneNumber, destinationFrom, destinationTo, distance);
+                    booking = new Booking( orderNumber, customerName, vehicle, driver, destinationFrom, destinationTo, distance);
                 }
             }
         } catch (SQLException | ClassNotFoundException e) {

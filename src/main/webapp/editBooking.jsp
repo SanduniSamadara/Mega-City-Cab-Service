@@ -10,34 +10,12 @@
 <%@ page import="com.megacity.model.Booking" %>
 <%@ page import="com.megacity.dao.BookingDAO" %>
 <%@ page import="com.megacity.dao.daoImpl.BookingDAOImpl" %>
+<%@ page import="com.megacity.dao.facory.BookingDAOFactory" %>
 
 <%
-  // Get the bookingNumber from the URL parameter
-  String bookingNumber = request.getParameter("bookingNumber");
-
-  if (bookingNumber == null || bookingNumber.isEmpty()) {
-    // If no booking number is found, redirect to the bookings list page
-    response.sendRedirect("booking.jsp");
-    return;
-  }
-
-  // Instantiate BookingDAOImpl to interact with the database
-  BookingDAOImpl bookingDAO = new BookingDAOImpl();
-  Booking booking = null;
-
-  try {
-    // Fetch the booking details by bookingNumber
-    booking = bookingDAO.getBookingByNumber(bookingNumber);
-  } catch (Exception e) {
-    e.printStackTrace();
-    // Handle the exception accordingly, maybe redirect or show an error page
-  }
-
-  if (booking == null) {
-    // If booking not found, redirect to booking list
-    response.sendRedirect("booking.jsp");
-    return;
-  }
+  String bookingNo = request.getParameter("bookingNumber");
+  BookingDAOImpl bookingDAO = (BookingDAOImpl) BookingDAOFactory.getBookingDAO();
+  Booking booking = bookingDAO.getBookingByNumber(bookingNo);
 %>
 
 <html>
@@ -101,13 +79,13 @@
     <label for="driver">Driver:</label>
     <input type="text" id="driver" name="driver" value="<%= booking.getDriver() %>" required />
 
-    <label for="vehicle">Telephone Number:</label>
+    <label for="vehicle">Vehicle:</label>
     <input type="text" id="vehicle" name="vehicle" value="<%= booking.getVehicle() %>" required />
 
-    <label for="destinationFrom">Destination Details:</label>
+    <label for="destinationFrom">Destination From:</label>
     <input type="text" id="destinationFrom" name="destinationFrom" value="<%= booking.getDestinationFrom() %>" required />
 
-    <label for="destinationTo">Destination Details:</label>
+    <label for="destinationTo">Destination <To></To>:</label>
     <input type="text" id="destinationTo" name="destinationTo" value="<%= booking.getDestinationTo() %>" required />
 
     <label for="distance">Distance:</label>

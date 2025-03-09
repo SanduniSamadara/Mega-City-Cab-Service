@@ -124,13 +124,16 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
                 try {
                     BookingDAO bookingDAO = BookingDAOFactory.getBookingDAO();
                     Booking booking = bookingDAO.getBookingByNumber(bookingNumber);
-
-                    if (booking != null) {
-                        request.setAttribute("booking", booking);
-                        RequestDispatcher rd = request.getRequestDispatcher("editBooking.jsp");
-                        rd.forward(request, response);
-                        return; // Ensure no further execution
-                    }
+                    request.setAttribute("booking", booking);
+                    RequestDispatcher rd = request.getRequestDispatcher("editBooking.jsp");
+                    rd.forward(request, response);
+                    return;
+//                    if (booking != null) {
+//                        request.setAttribute("booking", booking);
+//                        RequestDispatcher rd = request.getRequestDispatcher("editBooking.jsp");
+//                        rd.forward(request, response);
+//                        return; // Ensure no further execution
+//                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

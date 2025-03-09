@@ -10,5 +10,5 @@ public interface BookingDAO {
     void updateBooking(Booking booking) throws Exception;
     void deleteBooking(String bookingNumber) throws Exception;
 
-    Booking getBookingById(int bookingId);
+//    Booking getBookingById(int bookingId);
 }

@@ -268,9 +268,9 @@
             <td><%= booking.getDestinationFrom() %></td>
             <td><%= booking.getDestinationTo() %></td>
             <td><%= booking.getDistance() %></td>
-            <td class="action-buttons">
+            <td>
 <%--                <a href="BookingServlet?action=edit&bookingNumber=<%= booking.getBookingNumber() %>" class="btn btn-warning btn-sm edit">Edit</a>--%>
-    <a href="editBooking.jsp?bookingNumber=<%= booking.getBookingNumber() %>" class="btn btn-warning btn-sm edit">Edit</a>
+    <a href="editBooking.jsp?bookingNumber=<%= booking.getBookingNumber() %>" class="btn btn-warning btn-sm">Edit</a>
     <a href="BookingServlet?action=delete&bookingNumber=<%= booking.getBookingNumber() %>" onclick="return confirm('Are you sure?');" class="btn btn-danger btn-sm delete">Delete</a>
             </td>
         </tr>
