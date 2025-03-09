@@ -257,7 +257,6 @@
         </thead>
         <tbody>
         <%
-            // Loop through the list of cars and display them in the table
             for (Booking booking : bookings) {
         %>
         <tr>
