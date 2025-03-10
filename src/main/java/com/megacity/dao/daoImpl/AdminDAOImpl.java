@@ -1,6 +1,9 @@
-package com.megacity.dao;
+package com.megacity.dao.daoImpl;
 
+import com.megacity.dao.AdminDAO;
 import com.megacity.model.Admin;
+import com.megacity.util.DBConnection;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,9 +12,16 @@ public class AdminDAOImpl implements AdminDAO {
 
     private Connection connection;
 
-    // Constructor: Set up the database connection
-    public AdminDAOImpl(Connection connection) {
-        this.connection = connection;
+    // Constructor to initialize connection
+    public AdminDAOImpl() {
+        try {
+            // Establish a connection to the database
+            connection = DBConnection.getConnection(); // Use your ConnectionFactory to get the connection
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

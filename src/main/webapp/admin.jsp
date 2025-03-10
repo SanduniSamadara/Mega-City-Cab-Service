@@ -11,18 +11,18 @@
 <%@ page import="com.megacity.dao.facory.AdminDAOFactory" %>
 <%@ page import="java.util.List" %>
 
-<%
-  // Fetch the admin list (if necessary)
-  AdminDAOImpl adminDAO = (AdminDAOImpl) AdminDAOFactory.getAdminDAO();
-  List<Admin> admins = adminDAO.getAllAdmins();
-%>
+<%--<%--%>
+<%--  // Fetch the admin list (if necessary)--%>
+<%--  AdminDAOImpl adminDAO = (AdminDAOImpl) AdminDAOFactory.getAdminDAO();--%>
+<%--  List<Admin> admins = adminDAO.getAllAdmins();--%>
+<%--%>--%>
 
-<% String message = request.getParameter("message");
-  if (message != null) { %>
-<div class="alert alert-success" role="alert">
-  <%= message %>
-</div>
-<% } %>
+<%--<% String message = request.getParameter("message");--%>
+<%--  if (message != null) { %>--%>
+<%--<div class="alert alert-success" role="alert">--%>
+<%--  <%= message %>--%>
+<%--</div>--%>
+<%--<% } %>--%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -35,11 +35,10 @@
 <body>
 
 <div class="container">
-  <h2 class="my-4">Admin Registration</h2>
+ <center> <h2 class="my-4">Admin Registration</h2></center>
 
   <!-- Admin Registration Form -->
   <div class="mb-4">
-    <h4>Register New Admin</h4>
     <form action="AdminServlet" method="POST">
       <div class="mb-3">
         <label for="username" class="form-label">Username</label>
@@ -59,7 +58,7 @@
       <button type="submit" class="btn btn-primary">Register Admin</button>
     </form>
   </div>
-
+</div>
 </body>
 </html>
 
