@@ -3,6 +3,7 @@ package com.megacity.controller;
 import com.megacity.dao.daoImpl.CarDAO;
 import com.megacity.dao.facory.CarDAOFactory;
 import com.megacity.model.Car;
+import com.megacity.model.Driver;
 
 
 import javax.servlet.RequestDispatcher;
@@ -19,19 +20,20 @@ public class CarServlet extends HttpServlet {
 
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String carId = request.getParameter("carId");
         String carName = request.getParameter("carName");
         String carModel = request.getParameter("carModel");
         String plateNo = request.getParameter("carNo");
         String carYearParam = request.getParameter("carYear");
         String carPriceParam = request.getParameter("carPrice");
 
-        if (carName == null || carName.isEmpty() ||
-                plateNo == null || plateNo.isEmpty() ||
-                carModel == null || carModel.isEmpty() ||
-                carYearParam == null || carPriceParam == null) {
-            response.sendRedirect("error.jsp?error=All fields are required.");
-            return; // Redirect with error message
-        }
+//        if (carName == null || carName.isEmpty() ||
+//                plateNo == null || plateNo.isEmpty() ||
+//                carModel == null || carModel.isEmpty() ||
+//                carYearParam == null || carPriceParam == null) {
+//            response.sendRedirect("error.jsp?error=All fields are required.");
+//            return; // Redirect with error message
+//        }
 
         int carYear = 0;
         double carPrice = 0.0;
@@ -45,65 +47,75 @@ public class CarServlet extends HttpServlet {
         }
 
         // Validate carYear and carPrice
-        if (carYear <= 0 || carPrice <= 0) {
-            response.sendRedirect("error.jsp?error=Invalid car details provided.");
-            return; // Redirect with error message
-        }
+//        if (carYear <= 0 || carPrice <= 0) {
+//            response.sendRedirect("error.jsp?error=Invalid car details provided.");
+//            return; // Redirect with error message
+//        }
 
-        Car newCar = new Car(0, carName, plateNo, carYear, carPrice, carModel);
-
-        try {
-            CarDAO carDAO = CarDAOFactory.getCarDAO();
-            carDAO.addCar(newCar);
-            request.setAttribute("message", "Car added successfully");
-            RequestDispatcher dispatcher = request.getRequestDispatcher("car.jsp");
-            dispatcher.forward(request, response);
-//            response.sendRedirect("car.jsp?message=Car added successfully.");
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.sendRedirect("error.jsp?error=An error occurred while adding the car.");
-        }
-    }
-
-    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String carIdParam = request.getParameter("carId");
-        String carName = request.getParameter("carName");
-        String carModel = request.getParameter("carModel");
-        String plateNo = request.getParameter("carPlateNumber");
-        String carYearParam = request.getParameter("carYear");
-        String carPriceParam = request.getParameter("carPrice");
-
-        if (carName == null || carName.isEmpty() ||
-                plateNo == null || plateNo.isEmpty() ||
-                carModel == null || carModel.isEmpty() ||
-                carYearParam == null || carPriceParam == null) {
-            response.sendRedirect("error.jsp?error=All fields are required.");
-            return;
-        }
-
-        int carId = Integer.parseInt(carIdParam);
-        int carYear = Integer.parseInt(carYearParam);
-        double carPrice = Double.parseDouble(carPriceParam);
-
-        // Validate carYear and carPrice
-        if (carYear <= 0 || carPrice <= 0) {
-            response.sendRedirect("error.jsp?error=Invalid car details provided.");
-            return;
-        }
-
-        // Create the Car object with updated details
-        Car updatedCar = new Car(carId, carName, plateNo, carYear, carPrice, carModel);
 
         try {
             CarDAO carDAO = CarDAOFactory.getCarDAO();
-            carDAO.updateCar(updatedCar); // Update the car in the database
-            response.sendRedirect("car.jsp?message=Car updated successfully.");
 
+            if (carId != null && !carId.isEmpty()) {
+                // Updating existing car
+                Car existingCar = new Car(Integer.parseInt(carId), carName, plateNo, carYear, carPrice, carModel);
+                carDAO.updateCar(existingCar); // Update car in DB
+                request.setAttribute("message", "Car updated successfully"); // Set success message for forwarding
+                RequestDispatcher dispatcher = request.getRequestDispatcher("car.jsp");
+                dispatcher.forward(request, response); // Forward to car.jsp with success message
+            } else {
+                // Adding new car
+                Car newCar = new Car(0, carName, plateNo, carYear, carPrice, carModel);
+                carDAO.addCar(newCar); // Add car to DB
+                request.setAttribute("message", "Car added successfully"); // Set success message for forwarding
+                RequestDispatcher dispatcher = request.getRequestDispatcher("car.jsp");
+                dispatcher.forward(request, response); // Forward to car.jsp with success message
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("error.jsp?error=An error occurred while updating the car.");
+            response.sendRedirect("error.jsp?error=An error occurred while processing the car.");
         }
     }
+
+//    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//        String carIdParam = request.getParameter("carId");
+//        String carName = request.getParameter("carName");
+//        String carModel = request.getParameter("carModel");
+//        String plateNo = request.getParameter("carPlateNumber");
+//        String carYearParam = request.getParameter("carYear");
+//        String carPriceParam = request.getParameter("carPrice");
+//
+//        if (carName == null || carName.isEmpty() ||
+//                plateNo == null || plateNo.isEmpty() ||
+//                carModel == null || carModel.isEmpty() ||
+//                carYearParam == null || carPriceParam == null) {
+//            response.sendRedirect("car.jsp?error=All fields are required.");
+//            return;
+//        }
+//
+//        int carId = Integer.parseInt(carIdParam);
+//        int carYear = Integer.parseInt(carYearParam);
+//        double carPrice = Double.parseDouble(carPriceParam);
+//
+//        // Validate carYear and carPrice
+//        if (carYear <= 0 || carPrice <= 0) {
+//            response.sendRedirect("car.jsp?error=Invalid car details provided.");
+//            return;
+//        }
+//
+//        // Create the Car object with updated details
+//        Car updatedCar = new Car(carId, carName, plateNo, carYear, carPrice, carModel);
+//
+//        try {
+//            CarDAO carDAO = CarDAOFactory.getCarDAO();
+//            carDAO.updateCar(updatedCar); // Update the car in the database
+//            response.sendRedirect("car.jsp?message=Car updated successfully.");
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            response.sendRedirect("car.jsp?error=An error occurred while updating the car.");
+//        }
+//    }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");

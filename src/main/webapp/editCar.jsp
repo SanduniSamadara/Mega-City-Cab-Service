@@ -43,8 +43,8 @@
         </div>
 
         <div class="mb-3">
-            <label for="carPlateNumber" class="form-label">Plate Number</label>
-            <input type="text" class="form-control" id="carPlateNumber" name="carPlateNumber" value="<%= car.getPlateNumber() %>" required>
+            <label for="carNo" class="form-label">Plate Number</label>
+            <input type="text" class="form-control" id="carNo" name="carNo" value="<%= car.getPlateNumber() %>" required>
         </div>
 
         <div class="mb-3">
