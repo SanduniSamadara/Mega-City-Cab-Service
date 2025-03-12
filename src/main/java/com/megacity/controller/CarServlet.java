@@ -130,7 +130,10 @@ public class CarServlet extends HttpServlet {
             int carId = Integer.parseInt(request.getParameter("carId"));
             CarDAO carDAO = CarDAOFactory.getCarDAO();
             carDAO.deleteCar(carId); // Delete the car from the database
-            response.sendRedirect("car.jsp?message=Car deleted successfully.");// Redirect back to the car page after deletion
+            request.setAttribute("message", "Car deleted successfully!");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("car.jsp");
+            dispatcher.forward(request, response);
+//            response.sendRedirect("car.jsp?message=Car deleted successfully.");// Redirect back to the car page after deletion
         }
     }
 }
