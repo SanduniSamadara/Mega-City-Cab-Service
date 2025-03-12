@@ -34,7 +34,7 @@
 </head>
 <body>
 <h1>Customer Registration</h1>
-<form action="CustomerServlet" method="POST">
+<form action="CustomerServlet" method="POST" onsubmit="return validateForm()">
     <label for="registrationNumber">Registration Number:</label><br>
     <input type="text" id="registrationNumber" name="registrationNumber" required><br><br>
 
@@ -84,5 +84,33 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function validateForm() {
+        const regNumber = document.getElementById("registrationNumber").value;
+        const name = document.getElementById("name").value;
+        const address = document.getElementById("address").value;
+        const nic = document.getElementById("nic").value;
+
+        // Check if any field is empty
+        if (!regNumber || !name || !address || !nic) {
+            alert("All fields are required.");
+            return false;
+        }
+
+        // Validate NIC format
+        const nicPattern = /^(?:\d{9}[Vv]?|\d{12})$/;
+        if (!nic.match(nicPattern)) {
+            alert("Please enter a valid NIC");
+            return false;
+        }
+        const namePattern = /^[a-zA-Z\s]+$/; // Only allows letters and spaces
+        if (!name.match(namePattern)) {
+            alert("Name cannot contain special characters ");
+            return false;
+        }
+
+        return true; // Form is valid
+    }
+</script>
 </body>
 </html>
