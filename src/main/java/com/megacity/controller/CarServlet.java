@@ -17,25 +17,6 @@ import java.io.IOException;
 public class CarServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-//    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        String carName = request.getParameter("carName");
-//        String carModel = request.getParameter("carModel");
-//        String plateNo = request.getParameter("carNo");
-//        int carYear = Integer.parseInt(request.getParameter("carYear"));
-//        double carPrice = Double.parseDouble(request.getParameter("carPrice"));
-//
-//        // Validate input
-//        if (carName == null || plateNo == null || carYear <= 0 || carPrice <= 0 || carModel == null) {
-//            throw new IllegalArgumentException("Invalid car details provided");
-//        }
-//
-//        Car newCar = new Car(0, carName, plateNo, carYear, carPrice, carModel);
-//
-//        CarDAO carDAO = CarDAOFactory.getCarDAO();
-//        carDAO.addCar(newCar); // Add the new car to the database
-//
-//        response.sendRedirect("car.jsp"); // Redirect back to the car page after adding
-//    }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String carName = request.getParameter("carName");
@@ -73,8 +54,11 @@ public class CarServlet extends HttpServlet {
 
         try {
             CarDAO carDAO = CarDAOFactory.getCarDAO();
-            carDAO.addCar(newCar); // Add the new car to the database
-            response.sendRedirect("car.jsp?message=Car added successfully.");
+            carDAO.addCar(newCar);
+            request.setAttribute("message", "Car added successfully");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("car.jsp");
+            dispatcher.forward(request, response);
+//            response.sendRedirect("car.jsp?message=Car added successfully.");
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("error.jsp?error=An error occurred while adding the car.");
@@ -114,6 +98,7 @@ public class CarServlet extends HttpServlet {
             CarDAO carDAO = CarDAOFactory.getCarDAO();
             carDAO.updateCar(updatedCar); // Update the car in the database
             response.sendRedirect("car.jsp?message=Car updated successfully.");
+
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("error.jsp?error=An error occurred while updating the car.");
