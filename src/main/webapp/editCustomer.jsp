@@ -29,6 +29,7 @@
 <body>
 <h1>Edit Customer</h1>
 <form action="CustomerServlet" method="POST">
+    <input type="hidden" name="action" value="update">
     <input type="hidden" name="customerId" value="<%= customer.getId() %>">
 
     <label for="registrationNumber">Registration Number:</label><br>

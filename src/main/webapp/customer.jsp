@@ -17,13 +17,13 @@
     List<Customer> customers = customerDAO.getAllCustomers();
 %>
 
-<% String message = request.getParameter("message");
-    if (message != null) { %>
-<div class="alert alert-success" role="alert">
-    <%= message %>
-</div>
-<% } %>
-
+<%
+    String message = (String) request.getAttribute("message");
+    if (message != null) {
+%>
+<%
+    }
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -111,6 +111,26 @@
 
         return true; // Form is valid
     }
+
+    <%
+           // Check if a success message exists
+           message = (String) request.getAttribute("message");
+           if (message != null) {
+       %>
+    Swal.fire({
+        title: 'Success!',
+        text: '<%= message %>',
+        icon: 'success',
+        showCancelButton: true,
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Close',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = 'customer.jsp';
+        }
+    });
+    <% } %>
 </script>
 </body>
 </html>
