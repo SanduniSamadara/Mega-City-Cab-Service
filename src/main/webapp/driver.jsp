@@ -80,8 +80,9 @@
             for (Driver driver : drivers) {
         %>
         <tr>
-            <td><%= driver.getLicenseNumber() %></td>
             <td><%= driver.getName() %></td>
+            <td><%= driver.getLicenseNumber() %></td>
+
             <td><%= driver.getContactNumber() %></td>
             <td><%= driver.getAddress() %></td>
             <td>
