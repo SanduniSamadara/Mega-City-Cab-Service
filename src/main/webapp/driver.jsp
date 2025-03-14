@@ -36,20 +36,23 @@
 <body>
 <div class="container mt-4">
     <h1>Driver Registration</h1>
-    <form action="DriverServlet" method="POST">
+    <form action="DriverServlet" method="POST"  onsubmit="return validateForm()">
         <div class="mb-3">
             <label for="licenseNumber" class="form-label">License Number:</label>
-            <input type="text" class="form-control" id="licenseNumber" name="licenseNumber" required>
+            <input type="text" class="form-control" id="licenseNumber" name="licenseNumber" >
+            <span id="licenseError" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
             <label for="name" class="form-label">Name:</label>
-            <input type="text" class="form-control" id="name" name="name" required>
+            <input type="text" class="form-control" id="name" name="name">
+            <span id="nameError" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
             <label for="phone" class="form-label">Phone:</label>
-            <input type="text" class="form-control" id="phone" name="phone" required>
+            <input type="text" class="form-control" id="phone" name="phone" >
+            <span id="phoneError" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
@@ -94,5 +97,53 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function validateForm() {
+        let licenseNumber = document.getElementById("licenseNumber").value.trim();
+        let licenseError = document.getElementById("licenseError");
+
+        let licensePattern = /^([A-Za-z]{1,2}[0-9]{1,7}|[0-9]{12})$/; // Allow only letters and numbers
+
+        if (licenseNumber === "") {
+            licenseError.innerText = "License Number is required.";
+            return false;
+        } else if (!licensePattern.test(licenseNumber)) {  // FIX: Use ! to check invalid input
+            licenseError.innerText = "Invalid License Number format.";
+            return false;
+        } else {
+            licenseError.innerText = ""; // Clear error if valid
+        }
+
+            let name = document.getElementById("name").value.trim();
+            let nameError = document.getElementById("nameError");
+
+            if (name === "") {
+                nameError.innerText = "Name is required.";
+                return false; // Prevent form submission
+            } else {
+                nameError.innerText = ""; // Clear error if valid
+                return true;
+            }
+
+        let phone = document.getElementById("phone").value.trim();
+        let phoneError = document.getElementById("phoneError");
+
+        let phonePattern = /^([0-9]{10})$/;
+
+        if (phone === "") {
+            phoneError.innerText = "Phone Number is required.";
+            return false;
+        } else if (!phonePattern.test(phone)) {
+            phoneError.innerText = "Enter 10 digit phone no.";
+            return false;
+        } else {
+            phoneError.innerText = "";
+        }
+
+
+        return true;
+    }
+
+</script>
 </body>
 </html>

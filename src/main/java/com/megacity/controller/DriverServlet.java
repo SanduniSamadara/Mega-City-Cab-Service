@@ -26,6 +26,14 @@ public class DriverServlet extends HttpServlet {
         String phone = request.getParameter("phone");
         String address = request.getParameter("address");
 
+        String errorMessage = null;
+
+        if (licenseNumber == null || licenseNumber.trim().isEmpty()) {
+            errorMessage = "Error: License Number is required.";
+        } else if (!licenseNumber.matches("^[A-Za-z0-9]+$")) {  // Only letters and numbers
+            errorMessage = "Error: License Number must contain only letters and numbers.";
+        }
+
         DriverDAO driverDAO = DriverDAOFactory.getDriverDAO();
 
         if (driverId != null && !driverId.isEmpty()) {
