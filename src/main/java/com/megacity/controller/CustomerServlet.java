@@ -36,12 +36,15 @@ public class CustomerServlet extends HttpServlet {
                 // If it's an add, create a new customer and add to DB
                 Customer newCustomer = new Customer(0, registrationNumber, name, address, nic);
                 customerDAO.addCustomer(newCustomer);
-                request.setAttribute("message", "Customer added successfully");
+//                request.setAttribute("message", "Customer added successfully"); // Set success message for forwarding
+//                RequestDispatcher dispatcher = request.getRequestDispatcher("customer.jsp");
+//                dispatcher.forward(request, response);
+
+                request.getSession().setAttribute("message", "Customer added successfully");
+                response.sendRedirect("customer.jsp");
+
             }
 
-            // Redirect to the customer page
-            RequestDispatcher dispatcher = request.getRequestDispatcher("customer.jsp");
-            dispatcher.forward(request, response);
 
         } catch (Exception e) {
             // Handle exception
